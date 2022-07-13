@@ -6,6 +6,8 @@ import contractions
 from textblob import TextBlob
 from flask import Flask, request, jsonify
 import socket
+from nltk.stem import WordNetLemmatizer
+
 
 api_key = 'JgjxyWz2fnf69f0QBIf3XWHTb'
 api_key_secret = 'TSVN9Gg6j12Xz5D0YlSNXf2D2mQ8iI7n59mqUBjCsrFYMZeY05'
@@ -94,6 +96,11 @@ def preprocessing(tweet):
     tweet_bersih3 = contractions.fix(tweet_bersih2)
 
     return tweet_bersih3
+
+# proses pencarian kata baku
+def lemmitization(word):
+    lemmatizer = WordNetLemmatizer()
+    lemmatizer.lemmatize(word)
 
 # proses crawling
 def crawling():
