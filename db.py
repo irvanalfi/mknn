@@ -42,7 +42,7 @@ def db_import_data_testing(path):
     conn = db_connection()
     cursor = conn.cursor()
     sql_query = """INSERT INTO testing(username, tweet_asli, clean_text, tokenize, stopword_r, tweet_hasil, 
-    polaritas) VALUES(?, ?, ?, ?, ?, ?, ?)"""
+    polaritas_awal) VALUES(?, ?, ?, ?, ?, ?, ?)"""
     file = open(path, encoding="utf-8")
     contents = csv.reader(file, delimiter=';')
     data_insert = []
@@ -52,7 +52,7 @@ def db_import_data_testing(path):
         data_insert.append([row[0], row[1], c_text, "'" + "','".join(map(str, tokenize_text)),
                             "'" + "','".join(map(str, stopwords)), lemmawords, row[2]])
 
-    cursor.executemany(sql_query, contents)
+    cursor.executemany(sql_query, data_insert)
     conn.commit()
     print("Success import data testing from csv")
     cursor.close()

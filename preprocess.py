@@ -7,7 +7,7 @@ from nltk.stem import WordNetLemmatizer
 def clean_text(text):
     # bersih2 username (@blabla), hapus selain alfabet dan hapus url dan lowercase
     tweet_bersih = ''.join(
-        re.sub("(@[A-Za-z0-9]+)|(#+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", text).lower())
+        re.sub("(@[\w]+)|(#)|(\w+:\/\/\S+)|(\d+)", " ", text).lower())
 
     # ubah perulangan huruf yang banyak menjadi dua huruf
     tweet_bersih = re.sub(r'(.)\1+', r'\1\1', tweet_bersih)

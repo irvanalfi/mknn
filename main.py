@@ -1,7 +1,7 @@
 from flask import Flask
 import socket
 
-from db import db_import_data_training, db_get_all_training
+from db import db_import_data_testing, db_import_data_training
 
 import preprocess
 
@@ -18,7 +18,7 @@ def dashboar():
 
 if __name__ == "__main__":
     # app.run(host=my_ip)
-    # db_import_data_training()
     # db_get_all_training()
-    db_import_data_training("Upload/training.csv")
+    # db_import_data_training("Upload/training.csv")
+    db_import_data_testing("Upload/testing.csv")
     # preprocess.preprocessing("@ctigeek Hi Steven, this was improved in recent Windows Insider builds. Here's more information regarding the improvement: https://t.co/s4A4ayqPyZ")
