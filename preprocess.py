@@ -4,6 +4,7 @@ from nltk import tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
+
 def clean_text(text):
     # bersih2 username (@blabla), hapus selain alfabet dan hapus url dan lowercase
     tweet_bersih = ''.join(
@@ -17,8 +18,10 @@ def clean_text(text):
 
     return tweet_bersih
 
+
 def tokenizing(clean_text: str):
     return tokenize.word_tokenize(clean_text)
+
 
 def stop_word_removal(token_text):
     manual_stop = ("windows", "pc")
@@ -26,6 +29,7 @@ def stop_word_removal(token_text):
     stops.update(manual_stop)
     stopword = [word for word in token_text if word not in stops]
     return stopword
+
 
 # proses pencarian kata baku
 def lemmitization(text: list):
