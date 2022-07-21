@@ -1,5 +1,7 @@
 import sqlite3
 
+from nltk.sem.chat80 import sql_query
+
 import preprocess
 
 
@@ -58,3 +60,14 @@ def db_get_all_training():
 
     for r in row:
         print(r)
+
+def get_hasil(data):
+    conn, cursor = get_conn_cursor()
+    sql_query = "select tweet_hasil FROM " + data
+    row = cursor.execute(sql_query).fetchall()
+    temp = []
+    for x in row:
+        for y in x:
+            temp.append(y)
+    tagged = temp
+    return temp

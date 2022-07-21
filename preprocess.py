@@ -1,6 +1,7 @@
 import re
 import csv
 import contractions
+import emoji
 from nltk import tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
@@ -8,14 +9,17 @@ from nltk.stem import WordNetLemmatizer
 
 def clean_text(text):
     # bersih2 username (@blabla), hapus selain alfabet dan hapus url dan lowercase
-    tweet_bersih = ''.join(
-        re.sub("(@[\w]+)|(#)|(\w+:\/\/\S+)|(\d+)", " ", text).lower())
+    tweet_bersih = ''.join(re.sub("(@[\w]+)|(\w+:\/\/\S+)", " ", text))
 
+    # ubah emoji menjadi text
+    tweet_bersih = emoji.demojize(tweet_bersih)
     # ubah perulangan huruf yang banyak menjadi dua huruf
     tweet_bersih = re.sub(r'(.)\1+', r'\1\1', tweet_bersih)
-
+    tweet_bersih = re.sub(r'[^a-zA-Z]', ' ', tweet_bersih)
+    tweet_bersih = re.sub('#+', ' ', tweet_bersih)
     # ubah singkatan menjadi kepanjangan
     tweet_bersih = contractions.fix(tweet_bersih)
+    tweet_bersih = tweet_bersih.lower()
 
     return tweet_bersih
 
@@ -25,7 +29,7 @@ def tokenizing(clean_text: str):
 
 
 def stop_word_removal(token_text):
-    manual_stop = ("windows", "pc")
+    manual_stop = ("windows", "pc", "microsoft", "android", "computer", "device", "google", "chrome", "edge", "browser")
     stops = set(stopwords.words("english"))
     stops.update(manual_stop)
     stopword = [word for word in token_text if word not in stops]

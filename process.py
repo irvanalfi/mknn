@@ -1,86 +1,77 @@
-import math
+from math import sqrt, pow
+import pandas as pd
+import numpy as np
+from IPython.display import display
 
-# Count term in word
-
-
-def count_term(dict_text, text):
-    for word in text:
-        dict_text[word] += 1
-    return dict_text
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfTransformer
 
 
-def comp_tf(doc_num_dict, doc):
-    tf_doc = {}
-    len_doc = len(doc)
-    # every document
-    for word, count in doc_num_dict.items():
-        tf_doc[word] = count / float(len_doc)
-    return tf_doc
+#kodingan irvan
+def showDataTraining():
+    df = pd.read_csv("Upload/testing.csv", encoding="ISO-8859-1")
+    df.head()
 
+def countDataTraining():
+    pass
+    #TODO
 
-def comp_df(documents: list):
-    # initiate dictionary with first document
-    df_dict = dict.fromkeys(documents[0], 0)
-    # every word and value in doc in documents
-    for doc in documents:
-        for word, val in doc.items():
-            # if dictionary word found +1 else initiate 1
-            if word in df_dict:
-                df_dict[word] += 1
-            else:
-                df_dict[word] = 1
-    return df_dict
+def tfidf(tweet_bersih):
+    bow_transformer = CountVectorizer().fit(tweet_bersih)
+    print(bow_transformer.vocabulary_)
 
+    tokens = bow_transformer.get_feature_names()
+    print(tokens)
 
-def comp_idf(documents: list):
-    n = len(documents)
+    text_bow = bow_transformer.transform(tweet_bersih)
+    print(text_bow)
 
-    idf_dict = {}
-    df_dict = comp_df(documents)
+    X = text_bow.toarray()
+    print(X)
+    X.shape
 
-    #  every word with value in df_dict calculate log(n/val)
-    for word, val in df_dict.items():
-        idf_dict[word] = math.log(n / float(val))
-    return idf_dict
+    tfidf_transformer = TfidfTransformer().fit(text_bow)
+    print(tfidf_transformer)
 
+    title_tfidf = tfidf_transformer.transform(text_bow)
+    print(title_tfidf)
+    print(title_tfidf.shape)
 
-def comp_tf_idf(tfs, idfs):
-    tfidf = {}
-    for tf in tfs:
-        for word, val in tf.items():
-            tfidf[word] = val * idfs[word]
-    return tfidf
+    dd = pd.DataFrame(data=title_tfidf.toarray(), columns=tokens)
+    display(dd)
+    dd.to_csv('C:/Users/IRVAN/backendmknn/Upload/tfidftesting.csv', index= False)
 
-
-def get_tf_idf(text_test: list, text_training_list: list):
-    # Merge text to one list
-    docs = [text_test, *text_training_list]
-
-    # Get TF data and count term docs
-    docs_num = []
-    tfs = []
-    for doc in docs:
-        # change doc list to dictionary with initial 0 value
-        doc_num = count_term(dict.fromkeys(doc, 0), doc)
-        # add dictionary to list
-        docs_num.append(doc_num)
-        # calculate and get tf data from dictionary document
-        tf = comp_tf(doc_num, doc)
-        tfs.append(tf)
-
-    # Get IDF Data
-    idfs = comp_idf(docs_num)
-
-    tfidfs = comp_tf_idf(tfs, idfs)
-    # for tf in tfs:
-
-    return tfidfs
-
+    return X
 
 def classification():
     pass
     # TODO
 
+
+def jarakeuclideanDTDT(df):
+    dict = {}
+    df2 = []
+    for i in range(df.shape[0]):
+        dtdt = []
+        for j in range(df.shape[0]):
+            sum = 0
+            if i != j:
+                for k in df:
+                    sum += pow(df[k][i]-df[k][j], 2)
+                dtdt.append(sqrt(sum))
+                # print(sqrt(sum))
+
+
+                # dict = {i : dtdt}
+                # df2['D'+str(i)] = pd.Series(dtdt)
+            else:
+                dtdt.append(0)
+                # dict = {i: dtdt}
+                # df2['D' + str(i)] = pd.Series(dtdt)
+        df2.append(dtdt)
+    x = pd.DataFrame(df2)
+    x.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', index=False)
+    # return
 
 def testaccuracy():
     pass
