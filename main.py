@@ -6,7 +6,7 @@ from IPython.display import display
 from db import db_import_data_testing, db_import_data_training, get_hasil
 
 import preprocess
-from process import tfidf, jarakeuclideanDTDT
+from process import tfidf, jarakeuclideanDTDT, small
 
 my_ip = socket.gethostbyname(socket.gethostname())
 app = Flask(__name__)
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     # db_import_data_training("Upload/training.csv")
     # db_import_data_testing("Upload/testing.csv")
 
-    # x=tfidf(get_hasil(data='testing'))
+    # x=tfidf(get_hasil(data='training'))
     #
     # print(x)
 
@@ -37,11 +37,11 @@ if __name__ == "__main__":
 
 
 
-    # hasil = get_hasil()
+    # hasil = get_hasil(data="training")
     # df= pd.DataFrame(bow_vectorize.todense().T, index=text_bow, columns=[f'D{i+1}' for i in range(len(hasil))])
     # df
 
-    # process.tfidf()
+    # tfidf()
     # db_import_data_testing("Upload/testing.csv")
     # data = preprocess.get_data_preprocessing("Upload/training.csv")
     # data_testing = preprocess.get_data_preprocessing("Upload/testing.csv")
@@ -52,6 +52,9 @@ if __name__ == "__main__":
     #
     # test = process.get_tf_idf(data_testing[0][5].split(" "), data_ready)
     # preprocess.preprocessing("@ctigeek Hi Steven, this was improved in recent Windows Insider builds. Here's more information regarding the improvement: https://t.co/s4A4ayqPyZ")
-    df = pandas.read_csv('C:/Users/IRVAN/backendmknn/Upload/tfidftraining.csv', sep = ';')
+    # df = pandas.read_csv('C:/Users/IRVAN/backendmknn/Upload/tfidftraining.csv', sep = ',')
+    # display(df)
+    # jarakeuclideanDTDT(df)
+    df = pandas.read_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', sep = ',')
     display(df)
-    jarakeuclideanDTDT(df)
+    small(df)

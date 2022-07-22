@@ -49,6 +49,7 @@ def classification():
 
 
 def jarakeuclideanDTDT(df):
+    # df = df.iloc[1:, :]
     dict = {}
     df2 = []
     for i in range(df.shape[0]):
@@ -70,8 +71,17 @@ def jarakeuclideanDTDT(df):
                 # df2['D' + str(i)] = pd.Series(dtdt)
         df2.append(dtdt)
     x = pd.DataFrame(df2)
-    x.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', index=False)
+    x.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', index=False, float_format="%.2f")
     # return
+
+def small(df):
+    df2 = []
+    # sort = []
+    for i in df:
+        df2.append(df[i].sort())
+
+
+    print(df2)
 
 def testaccuracy():
     pass

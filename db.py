@@ -63,7 +63,7 @@ def db_get_all_training():
 
 def get_hasil(data):
     conn, cursor = get_conn_cursor()
-    sql_query = "select tweet_hasil FROM " + data
+    sql_query = "select tweet_hasil FROM " + data + " limit 60"
     row = cursor.execute(sql_query).fetchall()
     temp = []
     for x in row:
