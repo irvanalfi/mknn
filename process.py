@@ -2,6 +2,7 @@ from math import sqrt, pow
 import pandas as pd
 import numpy as np
 from IPython.display import display
+import numpy as np
 
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
@@ -71,7 +72,8 @@ def jarakeuclideanDTDT(df):
                 # df2['D' + str(i)] = pd.Series(dtdt)
         df2.append(dtdt)
     x = pd.DataFrame(df2)
-    x.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', index=False, float_format="%.2f")
+    # x.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', index=False, float_format="%.2f")
+    x.to_csv('D:/github/mknn/Upload/euclideandtdt.csv', index=False, float_format="%.2f")
     # return
 
 
@@ -97,13 +99,73 @@ def jarakeuclideanDTDS(dtdf,dsdf):
     # return
 
 def small(df):
-    df2 = []
-    # sort = []
-    for i in df:
-        df2.append(df[i].sort())
+    a = df.iloc[0]
+    array=[0]*len(a) # Membuat array kosong untuk menyimpan data per baris
+    print(type(array))
+    for x in range(len(a)):
+        array[x]=df.iloc[[x]] # Menyimpan setiap kolumn dalam index array
+        array[x] = array[x].values.tolist() # Merubah values menjadi dalam bentuk list
+        array[x] = array[x][0] # Menghilangkan Bracket
+        array[x].sort() # Proses sorting data
+    df2 = pd.DataFrame(array)
+    # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv')
+    df2.to_csv('D:/github/mknn/Upload/smalleuclideandtdt.csv', index=False)
 
+def k11_euclidean(df):
+    a = df.iloc[0]
+    array=[0]*len(a) # Membuat array kosong untuk menyimpan data per baris
+    print(type(array))
+    for x in range(len(a)):
+        array[x]=df.iloc[[x]] # Menyimpan setiap kolumn dalam index array
+        array[x] = array[x].values.tolist() # Merubah values menjadi dalam bentuk list
+        array[x] = array[x][0] # Menghilangkan Bracket
+        array[x] = array[x][1:12]
+    df2 = pd.DataFrame(array)
+    # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv')
+    df2.to_csv('D:/github/mknn/Upload/k11smalleuclideandtdt.csv', index=False)
 
-    print(df2)
+def lokasi(df):
+    a = df.iloc[0]
+    array=[0]*len(a) # Membuat array kosong untuk menyimpan data per baris
+    print(type(array))
+    for x in range(len(a)):
+        array[x]= df.iloc[[x]] # Menyimpan setiap kolumn dalam index array
+        array[x] = array[x].values.tolist() # Merubah values menjadi dalam bentuk list
+        array[x] = array[x][0] # Menghilangkan Bracket
+        np_array = np.array(array[x]).argsort()[1:12]
+
+        array[x] = np_array # Proses sorting data
+    df2 = pd.DataFrame(array)
+    # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv')
+    df2.to_csv('D:/github/mknn/Upload/argsmalleuclideandtdt.csv', index=False)
+
+def pelabelan(df1, df2):
+    pd.options.mode.chained_assignment = None 
+    # print(df1)
+    for x, y in df1.iterrows():
+        # print(x)
+        for a in df1:
+            df1[a][x] = df2['0'][y[a]]
+            # print(df2['0'][y[a]])
+    # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv')
+    df1.to_csv('D:/github/mknn/Upload/labelargsmalleuclideandtdt.csv', index=False)
+
+def validitas(df1, df2):
+    a = df1.iloc[0]
+    array=[0]*len(a) # Membuat array kosong untuk menyimpan data per baris
+    print(type(array))
+    for x in range(len(a)):
+        sum = 0
+        if a[x] == df2['0'][x]:
+            sum += 1
+        result = 1/(x+1)*(sum)
+        array[x] = result
+        # array[x] = df1.iloc[[x]] # Menyimpan setiap kolumn dalam index array
+        # array[x] = array[x].values.tolist() # Merubah values menjadi dalam bentuk list
+        # array[x] = array[x][0] # Menghilangkan Brac # Proses sorting data
+    df2 = pd.DataFrame(array)
+    # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv')
+    df2.to_csv('D:/github/mknn/Upload/valargsmalleuclideandtdt.csv', index=False)
 
 def testaccuracy():
     pass
