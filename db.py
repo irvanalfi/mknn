@@ -1,7 +1,7 @@
 import sqlite3
-
+from IPython.display import display
 from nltk.sem.chat80 import sql_query
-
+import pandas as pd
 import preprocess
 
 
@@ -61,13 +61,31 @@ def db_get_all_training():
     for r in row:
         print(r)
 
-def get_hasil(data):
+def get_hasil():
     conn, cursor = get_conn_cursor()
-    sql_query = "select tweet_hasil FROM " + data + " limit 60"
+    sql_query = "select tweet_hasil FROM training"
     row = cursor.execute(sql_query).fetchall()
     temp = []
     for x in row:
         for y in x:
             temp.append(y)
     tagged = temp
+    sql_query = "select tweet_hasil FROM testing"
+    row = cursor.execute(sql_query).fetchall()
+    for x in row:
+        for y in x:
+            temp.append(y)
+    return temp
+
+def get_label(data):
+    conn, cursor = get_conn_cursor()
+    sql_query = "select polaritas FROM " + data
+    row = cursor.execute(sql_query).fetchall()
+    temp = []
+    for x in row:
+        for y in x:
+            temp.append(y)
+    dd = pd.DataFrame(temp)
+    display(dd)
+    dd.to_csv('C:/Users/IRVAN/backendmknn/Upload/traininglabel.csv', index=False)
     return temp

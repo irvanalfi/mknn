@@ -39,7 +39,7 @@ def tfidf(tweet_bersih):
 
     dd = pd.DataFrame(data=title_tfidf.toarray(), columns=tokens)
     display(dd)
-    dd.to_csv('C:/Users/IRVAN/backendmknn/Upload/tfidftesting.csv', index= False)
+    dd.to_csv('C:/Users/IRVAN/backendmknn/Upload/tfidf.csv', index= False)
 
     return X
 
@@ -72,6 +72,28 @@ def jarakeuclideanDTDT(df):
         df2.append(dtdt)
     x = pd.DataFrame(df2)
     x.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', index=False, float_format="%.2f")
+    # return
+
+
+def jarakeuclideanDTDS(dtdf,dsdf):
+    # df = df.iloc[1:, :]
+    dict = {}
+    df2 = []
+    for i in range(dtdf.shape[0]):
+        dtdt = []
+        for j in range(dsdf.shape[0]):
+            sum = 0
+            for k in dtdf:
+                sum += pow(df[k][i]-df[k][j], 2)
+            dtdt.append(sqrt(sum))
+            # print(sqrt(sum))
+
+
+            # dict = {i : dtdt}
+            # df2['D'+str(i)] = pd.Series(dtdt)
+        df2.append(dtdt)
+    x = pd.DataFrame(df2)
+    x.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtds.csv', index=False, float_format="%.2f")
     # return
 
 def small(df):

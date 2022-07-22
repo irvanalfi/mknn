@@ -3,7 +3,7 @@ from flask import Flask
 import socket
 import pandas
 from IPython.display import display
-from db import db_import_data_testing, db_import_data_training, get_hasil
+from db import db_import_data_testing, db_import_data_training, get_hasil, get_label
 
 import preprocess
 from process import tfidf, jarakeuclideanDTDT, small
@@ -27,10 +27,10 @@ if __name__ == "__main__":
     # db_import_data_training("Upload/training.csv")
     # db_import_data_testing("Upload/testing.csv")
 
-    # x=tfidf(get_hasil(data='training'))
+    x=tfidf(get_hasil())
     #
     # print(x)
-
+    # get_label(data='training')
     # bow_vectorize = TfidfVectorizer()
     # res = bow_vectorize.fit_transform(get_hasil())
     # print(res)
@@ -55,6 +55,6 @@ if __name__ == "__main__":
     # df = pandas.read_csv('C:/Users/IRVAN/backendmknn/Upload/tfidftraining.csv', sep = ',')
     # display(df)
     # jarakeuclideanDTDT(df)
-    df = pandas.read_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', sep = ',')
-    display(df)
-    small(df)
+    # df = pandas.read_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', sep = ',')
+    # display(df)
+    # small(df)
