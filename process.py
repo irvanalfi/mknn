@@ -162,15 +162,17 @@ def pelabelan(df1, df2):
     return df1
 
 def validitas(df1, df2):
-    a = df1.iloc[0]
-    array=[0]*len(a) # Membuat array kosong untuk menyimpan data per baris
+    a = df1[df1.columns[0]].count()
+    array=[0]*a # Membuat array kosong untuk menyimpan data per baris
     print(type(array))
-    for x in range(len(a)):
-        sum = 0
-        if a[x] == df2['0'][x]:
-            sum += 1
-        result = 1/(x+1)*(sum)
-        array[x] = result
+    for x, y in df1.iterrows():
+        print(x, y)
+        for z in df1:
+            sum = 0
+            if y[z] == df2['0'][x]:
+                sum += 1
+            result = 1/(x+1)*(sum)
+            array[x] = result
         # array[x] = df1.iloc[[x]] # Menyimpan setiap kolumn dalam index array
         # array[x] = array[x].values.tolist() # Merubah values menjadi dalam bentuk list
         # array[x] = array[x][0] # Menghilangkan Brac # Proses sorting data
@@ -180,13 +182,21 @@ def validitas(df1, df2):
     return df2
 
 def ranking(df1, df2):
-    for i in range(int(df1[df1.columns[0]].count())):
-        df1[0][i] = df1[0][i]*(1/(df2[0][i]+0.5))
+    # array = df2.values.tolist()
+    # x = df1[df1.columns[0]].count()
+    # print(df2)
+    for x, y in df1.iterrows():
+        # print(
+        #     df1[0][x], 
+        #     y[0], 
+        #     df2[x]
+        #     )
+        df1[0][x] = y[0]*(1/(df2[x]+0.5))
     a = df1[0].values.tolist()
     label = np.array(a)
     a.sort()
     label = np.argsort(label)
-    print(label)
+    # print(label)
     df2 = pd.DataFrame(a)
     return df2, label
 
