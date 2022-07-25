@@ -127,7 +127,7 @@ def k11_euclidean(df):
         array[x]=df.iloc[[x]] # Menyimpan setiap kolumn dalam index array
         array[x] = array[x].values.tolist() # Merubah values menjadi dalam bentuk list
         array[x] = array[x][0] # Menghilangkan Bracket
-        array[x] = array[x][1:12]
+        array[x] = array[x][1:6]
     df2 = pd.DataFrame(array)
     # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv')
     # df2.to_csv('D:/github/mknn/Upload/k11smalleuclideandtdt.csv', index=False)
@@ -136,13 +136,14 @@ def k11_euclidean(df):
 def lokasi(df):
     a = df.iloc[0]
     array=[0]*len(a) # Membuat array kosong untuk menyimpan data per baris
-    print(type(array))
+    
     for x in range(len(a)):
+        # print(x)
         array[x]= df.iloc[[x]] # Menyimpan setiap kolumn dalam index array
         array[x] = array[x].values.tolist() # Merubah values menjadi dalam bentuk list
         array[x] = array[x][0] # Menghilangkan Bracket
-        np_array = np.array(array[x]).argsort()[1:12]
-
+        np_array = np.array(array[x]).argsort()[1:6]
+        # np_array = np_array+1
         array[x] = np_array # Proses sorting data
     df2 = pd.DataFrame(array)
     # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv')
@@ -155,7 +156,7 @@ def pelabelan(df1, df2):
     for x, y in df1.iterrows():
         # print(x)
         for a in df1:
-            df1[a][x] = df2['0'][y[a]]
+            df1[a][x] = df2['2'][y[a]]
             # print(df2['0'][y[a]])
     # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv')
     # df1.to_csv('D:/github/mknn/Upload/labelargsmalleuclideandtdt.csv', index=False)
@@ -163,15 +164,18 @@ def pelabelan(df1, df2):
 
 def validitas(df1, df2):
     a = df1[df1.columns[0]].count()
+    n = len(df1.iloc[0])
     array=[0]*a # Membuat array kosong untuk menyimpan data per baris
-    print(type(array))
+    # print(type(array))
     for x, y in df1.iterrows():
-        print(x, y)
+        # print(x, y)
+        sum = 0
         for z in df1:
-            sum = 0
-            if y[z] == df2['0'][x]:
+            
+            if y[z] == df2['2'][x]:
                 sum += 1
-            result = 1/(x+1)*(sum)
+            result = 1/(n)*(sum)
+            # print(n)
             array[x] = result
         # array[x] = df1.iloc[[x]] # Menyimpan setiap kolumn dalam index array
         # array[x] = array[x].values.tolist() # Merubah values menjadi dalam bentuk list
@@ -184,7 +188,7 @@ def validitas(df1, df2):
 def ranking(df1, df2):
     # array = df2.values.tolist()
     # x = df1[df1.columns[0]].count()
-    # print(df2)
+    # display(df2)
     for x, y in df1.iterrows():
         # print(
         #     df1[0][x], 
@@ -197,8 +201,8 @@ def ranking(df1, df2):
     a.sort()
     label = np.argsort(label)
     # print(label)
-    df2 = pd.DataFrame(a)
-    return df2, label
+    df2 = pd.DataFrame(a[:5])
+    return df2, label[:5]
 
 
 def testaccuracy():
