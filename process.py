@@ -1,15 +1,12 @@
 from math import sqrt, pow
 import pandas as pd
-import numpy as np
 from IPython.display import display
 import numpy as np
-from numba import jit
 from tqdm import tqdm
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 
 
-#kodingan irvan
 def showDataTraining():
     df = pd.read_csv("Upload/testing.csv", encoding="ISO-8859-1")
     df.head()
@@ -21,35 +18,25 @@ def countDataTraining():
 def tfidf(tweet_bersih):
     bow_transformer = CountVectorizer().fit(tweet_bersih)
     print(bow_transformer.vocabulary_)
-
     tokens = bow_transformer.get_feature_names()
     print(tokens)
-
     text_bow = bow_transformer.transform(tweet_bersih)
     print(text_bow)
-
     X = text_bow.toarray()
     print(X)
     X.shape
-
     tfidf_transformer = TfidfTransformer().fit(text_bow)
     print(tfidf_transformer)
-
     title_tfidf = tfidf_transformer.transform(text_bow)
     print(title_tfidf)
     print(title_tfidf.shape)
-
     dd = pd.DataFrame(data=title_tfidf.toarray(), columns=tokens)
     display(dd)
     dd.to_csv('C:/Users/IRVAN/backendmknn/Upload/tfidf.csv', index= False)
-
     return X
 
-def classification():
-    pass
-    # TODO
 
-@jit(target_backend = 'cuda')
+# @jit(target_backend = 'cuda')
 def jarakeuclideanDTDT(df):
     # df = df.iloc[1:, :]
     dict = {}
@@ -63,8 +50,6 @@ def jarakeuclideanDTDT(df):
                     sum += pow(df[k][i]-df[k][j], 2)
                 dtdt.append(sqrt(sum))
                 # print(sqrt(sum))
-
-
                 # dict = {i : dtdt}
                 # df2['D'+str(i)] = pd.Series(dtdt)
             else:
@@ -73,11 +58,10 @@ def jarakeuclideanDTDT(df):
                 # df2['D' + str(i)] = pd.Series(dtdt)
         df2.append(dtdt)
     x = pd.DataFrame(df2)
-    # x.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', index=False, float_format="%.2f")
-    x.to_csv('D:/github/mknn/Upload/euclideandtdt.csv', index=False, float_format="%.2f")
+    x.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', index=False, float_format="%.2f")
     return x
 
-@jit(target_backend = 'cuda')
+# @jit(target_backend = 'cuda')
 def jarakeuclideanDTDS(dtdf,dsdf,split):
     # df = df.iloc[1:, :]
     dict = {}
@@ -94,16 +78,14 @@ def jarakeuclideanDTDS(dtdf,dsdf,split):
                 sum += pow(dtdf[str(k)][i]-dsdf[str(k)][split+j], 2)
                 # print(sum)
             dtdt.append(sqrt(sum))
-            
             # print(sqrt(sum))
-
-
             # dict = {i : dtdt}
             # df2['D'+str(i)] = pd.Series(dtdt)
         df2.append(dtdt)
     x = pd.DataFrame(df2)
-    x.to_csv('D:/github/mknn/Upload/euclideandtds.csv', index=False, float_format="%.2f")
+    x.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtds.csv', index=False, float_format="%.2f")
     return x
+
 
 def small(df):
     a = df.iloc[0]
@@ -115,11 +97,10 @@ def small(df):
         array[x] = array[x][0] # Menghilangkan Bracket
         array[x].sort() # Proses sorting data
     df2 = pd.DataFrame(array)
-    # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv')
-    # df2.to_csv('D:/github/mknn/Upload/smalleuclideandtdt.csv', index=False)
+    # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/smalleuclideandtdt.csv', index=False)
     return df2
 
-def k11_euclidean(df):
+def k11_euclidean(df,k):
     a = df.iloc[0]
     array=[0]*len(a) # Membuat array kosong untuk menyimpan data per baris
     print(type(array))
@@ -127,13 +108,12 @@ def k11_euclidean(df):
         array[x]=df.iloc[[x]] # Menyimpan setiap kolumn dalam index array
         array[x] = array[x].values.tolist() # Merubah values menjadi dalam bentuk list
         array[x] = array[x][0] # Menghilangkan Bracket
-        array[x] = array[x][1:6]
+        array[x] = array[x][1:k+1]
     df2 = pd.DataFrame(array)
-    # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv')
-    # df2.to_csv('D:/github/mknn/Upload/k11smalleuclideandtdt.csv', index=False)
+    # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/k11smalleuclideandtdt.csv', index=False)
     return df2
 
-def lokasi(df):
+def lokasi(df,k):
     a = df.iloc[0]
     array=[0]*len(a) # Membuat array kosong untuk menyimpan data per baris
     
@@ -142,12 +122,11 @@ def lokasi(df):
         array[x]= df.iloc[[x]] # Menyimpan setiap kolumn dalam index array
         array[x] = array[x].values.tolist() # Merubah values menjadi dalam bentuk list
         array[x] = array[x][0] # Menghilangkan Bracket
-        np_array = np.array(array[x]).argsort()[1:6]
+        np_array = np.array(array[x]).argsort()[1:k+1]
         # np_array = np_array+1
         array[x] = np_array # Proses sorting data
     df2 = pd.DataFrame(array)
-    # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv')
-    # df2.to_csv('D:/github/mknn/Upload/argsmalleuclideandtdt.csv', index=False)
+    # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/argsmalleuclideandtdt.csv', index=False)
     return df2
 
 def pelabelan(df1, df2):
@@ -158,9 +137,9 @@ def pelabelan(df1, df2):
         for a in df1:
             df1[a][x] = df2['2'][y[a]]
             # print(df2['0'][y[a]])
-    # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv')
-    # df1.to_csv('D:/github/mknn/Upload/labelargsmalleuclideandtdt.csv', index=False)
+    # df1.to_csv('C:/Users/IRVAN/backendmknn/Upload/labelargsmalleuclideandtdt.csv', index=False)
     return df1
+
 
 def validitas(df1, df2):
     a = df1[df1.columns[0]].count()
@@ -181,11 +160,11 @@ def validitas(df1, df2):
         # array[x] = array[x].values.tolist() # Merubah values menjadi dalam bentuk list
         # array[x] = array[x][0] # Menghilangkan Brac # Proses sorting data
     df2 = pd.DataFrame(array)
-    # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv')
-    # df2.to_csv('D:/github/mknn/Upload/valargsmalleuclideandtdt.csv', index=False)
+    # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/valargsmalleuclideandtdt.csv', index=False)
     return df2
 
-def ranking(df1, df2):
+
+def ranking(df1, df2, k):
     # array = df2.values.tolist()
     # x = df1[df1.columns[0]].count()
     # display(df2)
@@ -201,10 +180,20 @@ def ranking(df1, df2):
     a.sort()
     label = np.argsort(label)
     # print(label)
-    df2 = pd.DataFrame(a[:5])
-    return df2, label[:5]
+    df2 = pd.DataFrame(a[:k])
+    return df2, label[:k]
 
 
+# Menghitung tingkat akurasi mknn
 def testaccuracy():
-    pass
-    # TODO
+    t = time()
+    y_pred = modelNB.predict(X_test_tf)
+    test_time = time() - t
+    print("test time:  %0.3fs" % test_time)
+    # compute the performance measures
+    score1 = metrics.accuracy_score(y_test, y_pred)
+    print("accuracy:   %0.3f" % score1)
+    print(metrics.classification_report(y_test, y_pred, target_names=['ND', 'SE', 'EKS', 'SP']))
+    print("confusion matrix:")
+    print(metrics.confusion_matrix(y_test, y_pred))
+    print('------------------------------')

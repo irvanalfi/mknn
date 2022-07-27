@@ -31,10 +31,8 @@ def crawling():
             if maxId <= 0:
                 newTweets = api.search_tweets(
                     q=search_key, count=tweetsPerQry, result_type="recent", tweet_mode="extended", lang="en")
-
             newTweets = api.search_tweets(q=search_key, count=tweetsPerQry, result_type="recent",
                                           tweet_mode="extended", lang="en", max_id=str(maxId - 1))
-
             if not newTweets:
                 print("Tweet Habis")
                 break
@@ -42,13 +40,10 @@ def crawling():
             for tweet in newTweets:
                 dictTweet = {}
                 dictTweet["username"] = tweet.user.screen_name
-
                 # bersih2 regex dan url
                 tweet_bersih = ' '.join(
                     re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet.full_text).split())
-
                 analysis = TextBlob(tweet_bersih)
-
                 # penghapusan retweet
                 if tweet_bersih.startswith("RT"):
                     continue
