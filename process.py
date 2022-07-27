@@ -5,7 +5,9 @@ import numpy as np
 from tqdm import tqdm
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
-
+from numba import jit, cuda
+from multigpu import device_controller, main
+import threading
 
 def showDataTraining():
     df = pd.read_csv("Upload/testing.csv", encoding="ISO-8859-1")
@@ -34,10 +36,12 @@ def tfidf(tweet_bersih):
     print(title_tfidf.shape)
     dd = pd.DataFrame(data=title_tfidf.toarray(), columns=tokens)
     display(dd)
-    dd.to_csv('C:/Users/IRVAN/backendmknn/Upload/tfidf.csv', index= False)
+    dd.to_csv('D:/github/mknn/Upload/tfidf.csv', index= False)
     return X
 
 
+# @jit(target_backend=device_controller(0))
+@main()
 def jarakeuclideanDTDT(df):
     # df = df.iloc[1:, :]
     dict = {}
@@ -59,10 +63,11 @@ def jarakeuclideanDTDT(df):
                 # df2['D' + str(i)] = pd.Series(dtdt)
         df2.append(dtdt)
     x = pd.DataFrame(df2)
-    x.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', index=False, float_format="%.2f")
+    x.to_csv('D:/github/mknn/Upload/euclideandtdt.csv', index=False, float_format="%.2f")
     return x
 
-
+# @jit(target_backend=device_controller(0))
+@main()
 def jarakeuclideanDTDS(dtdf,dsdf,split):
     # df = df.iloc[1:, :]
     dict = {}
@@ -84,7 +89,7 @@ def jarakeuclideanDTDS(dtdf,dsdf,split):
             # df2['D'+str(i)] = pd.Series(dtdt)
         df2.append(dtdt)
     x = pd.DataFrame(df2)
-    x.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtds.csv', index=False, float_format="%.2f")
+    x.to_csv('D:/github/mknn/Upload/euclideandtds.csv', index=False, float_format="%.2f")
     return x
 
 
@@ -98,7 +103,7 @@ def small(df):
         array[x] = array[x][0] # Menghilangkan Bracket
         array[x].sort() # Proses sorting data
     df2 = pd.DataFrame(array)
-    # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/smalleuclideandtdt.csv', index=False)
+    # df2.to_csv('D:/github/mknn/Upload/smalleuclideandtdt.csv', index=False)
     return df2
 
 
@@ -112,7 +117,7 @@ def k11_euclidean(df,k):
         array[x] = array[x][0] # Menghilangkan Bracket
         array[x] = array[x][1:k+1]
     df2 = pd.DataFrame(array)
-    # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/k11smalleuclideandtdt.csv', index=False)
+    # df2.to_csv('D:/github/mknn/Upload/k11smalleuclideandtdt.csv', index=False)
     return df2
 
 
@@ -128,7 +133,7 @@ def lokasi(df,k):
         # np_array = np_array+1
         array[x] = np_array # Proses sorting data
     df2 = pd.DataFrame(array)
-    # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/argsmalleuclideandtdt.csv', index=False)
+    # df2.to_csv('D:/github/mknn/Upload/argsmalleuclideandtdt.csv', index=False)
     return df2
 
 
@@ -140,7 +145,7 @@ def pelabelan(df1, df2):
         for a in df1:
             df1[a][x] = df2['2'][y[a]]
             # print(df2['0'][y[a]])
-    # df1.to_csv('C:/Users/IRVAN/backendmknn/Upload/labelargsmalleuclideandtdt.csv', index=False)
+    # df1.to_csv('D:/github/mknn/Upload/labelargsmalleuclideandtdt.csv', index=False)
     return df1
 
 
@@ -163,7 +168,7 @@ def validitas(df1, df2):
         # array[x] = array[x].values.tolist() # Merubah values menjadi dalam bentuk list
         # array[x] = array[x][0] # Menghilangkan Brac # Proses sorting data
     df2 = pd.DataFrame(array)
-    # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/valargsmalleuclideandtdt.csv', index=False)
+    # df2.to_csv('D:/github/mknn/Upload/valargsmalleuclideandtdt.csv', index=False)
     return df2
 
 
