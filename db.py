@@ -90,3 +90,15 @@ def updateData(nama_polaritas, nilai_polaritas, id):
     cursor.execute(query)
     conn.commit()
     conn.close()
+
+
+def get_polaritas(nama_polaritas):
+    conn, cursor = get_conn_cursor()
+    query = "select " + nama_polaritas + " FROM testing"
+    row = cursor.execute(query).fetchall()
+    temp = []
+    for x in row:
+        for y in x:
+            temp.append(y)
+
+    return temp

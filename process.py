@@ -1,13 +1,14 @@
+from time import time
 from math import sqrt, pow
 import pandas as pd
 from IPython.display import display
 import numpy as np
+from sklearn import metrics
 from tqdm import tqdm
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
-from numba import jit, cuda
-from multigpu import device_controller, main
-import threading
+from db import get_polaritas
+
 
 def showDataTraining():
     df = pd.read_csv("Upload/testing.csv", encoding="ISO-8859-1")
@@ -192,16 +193,20 @@ def ranking(df1, df2, k):
     return df2, label[:k]
 
 
-# Menghitung tingkat akurasi mknn
-def testaccuracy():
+# Menghitung tingkat akurasi mknn dengan confusion matrix
+def testaccuracy(polaritas_awal, polaritas_k):
+    polaritas_awal = get_polaritas(polaritas_awal)
+    polaritas_k = get_polaritas(polaritas_k)
+
     t = time()
-    y_pred = modelNB.predict(X_test_tf)
+    y_pred = polaritas_k
+    y_test = polaritas_awal
     test_time = time() - t
     print("test time:  %0.3fs" % test_time)
     # compute the performance measures
     score1 = metrics.accuracy_score(y_test, y_pred)
     print("accuracy:   %0.3f" % score1)
-    print(metrics.classification_report(y_test, y_pred, target_names=['ND', 'SE', 'EKS', 'SP']))
+    print(metrics.classification_report(y_test, y_pred, target_names=['Positif', 'Negatif', 'Netral']))
     print("confusion matrix:")
     print(metrics.confusion_matrix(y_test, y_pred))
     print('------------------------------')
