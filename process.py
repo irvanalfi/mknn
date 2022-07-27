@@ -11,9 +11,11 @@ def showDataTraining():
     df = pd.read_csv("Upload/testing.csv", encoding="ISO-8859-1")
     df.head()
 
+
 def countDataTraining():
     pass
     #TODO
+
 
 def tfidf(tweet_bersih):
     bow_transformer = CountVectorizer().fit(tweet_bersih)
@@ -36,7 +38,6 @@ def tfidf(tweet_bersih):
     return X
 
 
-# @jit(target_backend = 'cuda')
 def jarakeuclideanDTDT(df):
     # df = df.iloc[1:, :]
     dict = {}
@@ -61,7 +62,7 @@ def jarakeuclideanDTDT(df):
     x.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', index=False, float_format="%.2f")
     return x
 
-# @jit(target_backend = 'cuda')
+
 def jarakeuclideanDTDS(dtdf,dsdf,split):
     # df = df.iloc[1:, :]
     dict = {}
@@ -100,6 +101,7 @@ def small(df):
     # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/smalleuclideandtdt.csv', index=False)
     return df2
 
+
 def k11_euclidean(df,k):
     a = df.iloc[0]
     array=[0]*len(a) # Membuat array kosong untuk menyimpan data per baris
@@ -113,10 +115,10 @@ def k11_euclidean(df,k):
     # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/k11smalleuclideandtdt.csv', index=False)
     return df2
 
+
 def lokasi(df,k):
     a = df.iloc[0]
     array=[0]*len(a) # Membuat array kosong untuk menyimpan data per baris
-    
     for x in range(len(a)):
         # print(x)
         array[x]= df.iloc[[x]] # Menyimpan setiap kolumn dalam index array
@@ -128,6 +130,7 @@ def lokasi(df,k):
     df2 = pd.DataFrame(array)
     # df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/argsmalleuclideandtdt.csv', index=False)
     return df2
+
 
 def pelabelan(df1, df2):
     pd.options.mode.chained_assignment = None 
