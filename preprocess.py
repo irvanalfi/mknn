@@ -41,6 +41,7 @@ def lemmitization(text: list):
     lemma_words = ' '.join(lemma)
     return lemma_words
 
+
 # proses preprocessing
 def preprocessing(tweet):
     c_text = clean_text(tweet)

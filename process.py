@@ -42,7 +42,6 @@ def tfidf(tweet_bersih):
 
 
 # @jit(target_backend=device_controller(0))
-@main()
 def jarakeuclideanDTDT(df):
     # df = df.iloc[1:, :]
     dict = {}
@@ -68,7 +67,6 @@ def jarakeuclideanDTDT(df):
     return x
 
 # @jit(target_backend=device_controller(0))
-@main()
 def jarakeuclideanDTDS(dtdf,dsdf,split):
     # df = df.iloc[1:, :]
     dict = {}
@@ -197,7 +195,6 @@ def ranking(df1, df2, k):
 def testaccuracy(polaritas_awal, polaritas_k):
     polaritas_awal = get_polaritas(polaritas_awal)
     polaritas_k = get_polaritas(polaritas_k)
-
     t = time()
     y_pred = polaritas_k
     y_test = polaritas_awal

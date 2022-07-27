@@ -6,7 +6,7 @@ from IPython.display import display
 
 from db import db_import_data_testing, db_import_data_training, get_hasil, get_label, updateData
 # import preprocess
-from process import *
+from process import jarakeuclideanDTDS, ranking, tfidf, jarakeuclideanDTDT, small, k11_euclidean, lokasi, pelabelan, validitas, testaccuracy
 
 my_ip = socket.gethostbyname(socket.gethostname())
 app = Flask(__name__)
@@ -41,19 +41,13 @@ if __name__ == "__main__":
     # db_import_data_testing("Upload/testing.csv")
 
     # x=tfidf(get_hasil())
-    #
-    # print(x)
     # get_label(data='training')
     # bow_vectorize = TfidfVectorizer()
     # res = bow_vectorize.fit_transform(get_hasil())
-    # print(res)
-
     # hasil = get_hasil(data="training")
     # df= pd.DataFrame(bow_vectorize.todense().T, index=text_bow, columns=[f'D{i+1}' for i in range(len(hasil))])
     # df
 
-    # tfidf()
-    # db_import_data_testing("Upload/testing.csv")
     # data = preprocess.get_data_preprocessing("Upload/training.csv")
     # data_testing = preprocess.get_data_preprocessing("Upload/testing.csv")
     #
@@ -62,7 +56,7 @@ if __name__ == "__main__":
     #     data_ready.append(list_data[5].split(" "))
     #
     # test = process.get_tf_idf(data_testing[0][5].split(" "), data_ready)
-    # preprocess.preprocessing("@ctigeek Hi Steven, this was improved in recent Windows Insider builds. Here's more information regarding the improvement: https://t.co/s4A4ayqPyZ")
+
     df = pandas.read_csv('C:/Users/IRVAN/backendmknn/Upload/tfidf.csv', sep=';')
     display(df)
     # split1 = (df.shape[0]*8)/10
@@ -85,11 +79,11 @@ if __name__ == "__main__":
     # small_dtds.to_csv('D:/github/mknn/Upload/smalleuclideandtds.csv', index=False)
     # df = pandas.read_csv('D:/github/mknn/Upload/smalleuclideandtdt.csv', sep = ',')
     display(df)
-    k = [23,25,27,29,31,33,35,37,39,41]
+    k = [3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41]
     idx = 1
     for j in tqdm(k):
         idx = 1
-        nama_polaritas = "polaritas_akhir_k"+str(j)
+        nama_polaritas = "polaritas_akhir_k" + str(j)
         k11_dtdt = k11_euclidean(small_dtdt, j)
         k11_dtdt.to_csv('C:/Users/IRVAN/backendmknn/Upload/k11euclideandtdt.csv', index=False)
         # k11_dtds = k11_euclidean(small_dtds)
@@ -103,7 +97,7 @@ if __name__ == "__main__":
         # df1 = pandas.read_csv('D:/github/mknn/Upload/argsmalleuclideandtdt.csv', sep = ',')
         df2 = pandas.read_csv('C:/Users/IRVAN/backendmknn/Upload/training.csv', sep=';', header=None)[2]
         df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/label_train.csv', index=False)
-        df2 = pandas.read_csv('C:/Users/IRVAN/backendmknn/Upload/dataset/testing.csv', sep=';', header=None)[2]
+        df2 = pandas.read_csv('C:/Users/IRVAN/backendmknn/Upload/testing.csv', sep=';', header=None)[2]
         df2.to_csv('C:/Users/IRVAN/backendmknn/Upload/label_test.csv', index=False)
         display(df1)
         display(df2)
@@ -138,7 +132,7 @@ if __name__ == "__main__":
         # print(lbl2)
         label_df = pandas.DataFrame(lbl)
 
-    k = [3, 5, 7, 9, 11, 13, 15, 17, 19, 21]
-    for j in k:
-        print("pengujian akurasi k-" + str(j))
-        testaccuracy("polaritas_awal", "polaritas_akhir_k" + str(j))
+    # k = [3, 5, 7, 9, 11, 13, 15, 17, 19, 21]
+    # for j in k:
+    #     print("pengujian akurasi k-" + str(j))
+    #     testaccuracy("polaritas_awal", "polaritas_akhir_k" + str(j))
