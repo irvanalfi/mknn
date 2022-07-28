@@ -59,6 +59,7 @@ def get_data_preprocessing(path):
     file = open(path, encoding="utf-8")
     contents = csv.reader(file, delimiter=';')
     data = []
+    print(contents)
     for row in contents:
         c_text, tokenize_text, stopwords, lemmawords = preprocessing(row[1])
         data.append([row[0], row[1], c_text, "'" + "','".join(map(str, tokenize_text)),
