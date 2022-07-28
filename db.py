@@ -70,6 +70,28 @@ def get_hasil():
     return temp
 
 
+def get_hasil_training():
+    conn, cursor = get_conn_cursor()
+    sql_query = "select tweet_hasil FROM training"
+    row = cursor.execute(sql_query).fetchall()
+    temp = []
+    for x in row:
+        for y in x:
+            temp.append(y)
+    return temp
+
+
+def get_hasil_testing():
+    conn, cursor = get_conn_cursor()
+    sql_query = "select tweet_hasil FROM testing"
+    row = cursor.execute(sql_query).fetchall()
+    temp = []
+    for x in row:
+        for y in x:
+            temp.append(y)
+    return temp
+
+
 def get_label(data):
     conn, cursor = get_conn_cursor()
     sql_query = "select polaritas FROM " + data
@@ -79,7 +101,6 @@ def get_label(data):
         for y in x:
             temp.append(y)
     dd = pd.DataFrame(temp)
-    display(dd)
     dd.to_csv('C:/Users/IRVAN/backendmknn/Upload/traininglabel.csv', index=False)
     return temp
 
@@ -87,6 +108,22 @@ def get_label(data):
 def updateData(nama_polaritas, nilai_polaritas, id):
     conn, cursor = get_conn_cursor()
     query = "Update testing set " + nama_polaritas + " = " + "'"+str(nilai_polaritas) + "'" + " where id_testing = " + str(id)
+    cursor.execute(query)
+    conn.commit()
+    conn.close()
+
+
+def updatePolaritasAwalTraining(nilai_polaritas, id):
+    conn, cursor = get_conn_cursor()
+    query = "Update training set polaritas = " + "'"+str(nilai_polaritas) + "'" + " where id_training = " + str(id)
+    cursor.execute(query)
+    conn.commit()
+    conn.close()
+
+
+def updatePolaritasAwalTesting(nilai_polaritas, id):
+    conn, cursor = get_conn_cursor()
+    query = "Update testing set polaritas_awal = " + "'"+str(nilai_polaritas) + "'" + " where id_testing = " + str(id)
     cursor.execute(query)
     conn.commit()
     conn.close()

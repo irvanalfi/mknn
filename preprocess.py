@@ -5,6 +5,10 @@ import emoji
 from nltk import tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
+from textblob import TextBlob
+
+import db
+from db import *
 
 
 def clean_text(text):
@@ -60,3 +64,24 @@ def get_data_preprocessing(path):
         data.append([row[0], row[1], c_text, "'" + "','".join(map(str, tokenize_text)),
                      "'" + "','".join(map(str, stopwords)), lemmawords, row[2]])
     return data
+
+
+def pelabelanOtomatis():
+    data = [db.get_hasil_training(), db.get_hasil_testing()]
+
+    for index, i in enumerate(data):
+        label = ""
+        for index_2, tweet in enumerate(i):
+            dictTweet = {}
+            # bersih2 regex dan url
+            analysis = TextBlob(tweet)
+            if analysis.sentiment.polarity > 0.0:
+                label="positif"
+            elif analysis.sentiment.polarity == 0.0:
+                label="netral"
+            else:
+                label="negatif"
+            if(index == 0):
+                db.updatePolaritasAwalTraining(label, index_2)
+            else:
+                db.updatePolaritasAwalTesting(label, index_2)
