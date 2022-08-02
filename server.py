@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import json
 import sqlite3
 import socket
-from db import count_polaritas
+from db import *
 
 my_ip = socket.gethostbyname(socket.gethostname())
 app = Flask(__name__)
@@ -51,7 +51,15 @@ def dashboard_data():
     return jsonify(data)
 
 
+@app.route('/training-data', methods=['GET', 'POST'])
+def training_data():
+    return jsonify(db_get_all_training())
 
+
+@app.route('/testing-data', methods=['GET', 'POST'])
+def testing_data():
+    return jsonify(db_get_all_testing())
 
 if __name__ == "__main__":
     app.run(host=my_ip)
+    # training_data()
