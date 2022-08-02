@@ -12,16 +12,19 @@ from db import *
 
 
 def clean_text(text):
-    # bersih2 username (@blabla), hapus selain alfabet dan hapus url dan lowercase
+    # bersih2 username (@blabla), hapus selain alfabet dan hapus url
     tweet_bersih = ''.join(re.sub("(@[\w]+)|(\w+:\/\/\S+)", " ", text))
     # ubah emoji menjadi text
     tweet_bersih = emoji.demojize(tweet_bersih)
     # ubah perulangan huruf yang banyak menjadi dua huruf
     tweet_bersih = re.sub(r'(.)\1+', r'\1\1', tweet_bersih)
+    # hapus selain abjad
     tweet_bersih = re.sub(r'[^a-zA-Z]', ' ', tweet_bersih)
+    # hapus hastag
     tweet_bersih = re.sub('#+', ' ', tweet_bersih)
     # ubah singkatan menjadi kepanjangan
     tweet_bersih = contractions.fix(tweet_bersih)
+    # lowercase
     tweet_bersih = tweet_bersih.lower()
     return tweet_bersih
 

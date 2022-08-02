@@ -21,19 +21,6 @@ def dashboar():
     return data
 
 
-def most_frequent(List):
-    counter = 0
-    num = List[0]
-
-    for i in List:
-        curr_frequency = List.count(i)
-        if (curr_frequency > counter):
-            counter = curr_frequency
-            num = i
-
-    return num
-
-
 if __name__ == "__main__":
     # app.run(host=my_ip)
     # db_get_all_training()
@@ -51,6 +38,7 @@ if __name__ == "__main__":
     # jarak_dtdt = jarakeuclideanDTDT(df1)
     # jarak_dtds = jarakeuclideanDTDS(df1, df2, split1)
 
+    # proses jarak euclidean dan menyimpan data ke dalam file csv
     jarak_dtdt = pandas.read_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', sep=',')
     jarak_dtds = pandas.read_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtds.csv', sep=',')
 

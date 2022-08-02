@@ -78,7 +78,7 @@ def jarakeuclideanDTDS(dtdf,dsdf,split):
 
 def small(df):
     a = df.iloc[0]
-    array=[0]*len(a) # Membuat array kosong untuk menyimpan data per baris
+    array = [0]*len(a) # Membuat array kosong untuk menyimpan data per baris
     for x in range(len(a)):
         array[x]=df.iloc[[x]] # Menyimpan setiap kolumn dalam index array
         array[x] = array[x].values.tolist() # Merubah values menjadi dalam bentuk list
@@ -88,9 +88,9 @@ def small(df):
     return df2
 
 
-def k_euclidean(df,k):
+def k_euclidean(df, k):
     a = df.iloc[0]
-    array=[0]*len(a) # Membuat array kosong untuk menyimpan data per baris
+    array = [0]*len(a) # Membuat array kosong untuk menyimpan data per baris
     for x in range(len(a)):
         array[x]=df.iloc[[x]] # Menyimpan setiap kolumn dalam index array
         array[x] = array[x].values.tolist() # Merubah values menjadi dalam bentuk list
@@ -145,6 +145,19 @@ def ranking(df1, df2, k):
     label = np.argsort(label)
     df2 = pd.DataFrame(a[:k])
     return df2, label[:k]
+
+
+def most_frequent(List):
+    counter = 0
+    num = List[0]
+
+    for i in List:
+        curr_frequency = List.count(i)
+        if (curr_frequency > counter):
+            counter = curr_frequency
+            num = i
+
+    return num
 
 
 # Menghitung tingkat akurasi mknn dengan confusion matrix
