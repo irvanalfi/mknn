@@ -107,7 +107,8 @@ def get_label(data):
 
 def updateData(nama_polaritas, nilai_polaritas, id):
     conn, cursor = get_conn_cursor()
-    query = "Update testing set " + nama_polaritas + " = " + "'"+str(nilai_polaritas) + "'" + " where id_testing = " + str(id)
+    query = "Update testing set " + nama_polaritas + " = " + "'" + str(
+        nilai_polaritas) + "'" + " where id_testing = " + str(id)
     cursor.execute(query)
     conn.commit()
     conn.close()
@@ -115,7 +116,7 @@ def updateData(nama_polaritas, nilai_polaritas, id):
 
 def updatePolaritasAwalTraining(nilai_polaritas, id):
     conn, cursor = get_conn_cursor()
-    query = "Update training set polaritas = " + "'"+str(nilai_polaritas) + "'" + " where id_training = " + str(id)
+    query = "Update training set polaritas = " + "'" + str(nilai_polaritas) + "'" + " where id_training = " + str(id)
     cursor.execute(query)
     conn.commit()
     conn.close()
@@ -123,7 +124,7 @@ def updatePolaritasAwalTraining(nilai_polaritas, id):
 
 def updatePolaritasAwalTesting(nilai_polaritas, id):
     conn, cursor = get_conn_cursor()
-    query = "Update testing set polaritas_awal = " + "'"+str(nilai_polaritas) + "'" + " where id_testing = " + str(id)
+    query = "Update testing set polaritas_awal = " + "'" + str(nilai_polaritas) + "'" + " where id_testing = " + str(id)
     cursor.execute(query)
     conn.commit()
     conn.close()
@@ -139,3 +140,13 @@ def get_polaritas(nama_polaritas):
             temp.append(y)
 
     return temp
+
+
+def count_polaritas(nama_sentimen, nama_tabel, nama_kolom):
+    conn, cursor = get_conn_cursor()
+
+    query = "SELECT COUNT(" + nama_kolom + ") FROM " + nama_tabel \
+            + " WHERE " + nama_kolom + " = '" + nama_sentimen + "' "
+
+    row = cursor.execute(query).fetchone()[0]
+    return row
