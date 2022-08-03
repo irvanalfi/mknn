@@ -6,7 +6,6 @@ from db import *
 from process import *
 import pandas as pd
 
-
 my_ip = socket.gethostbyname(socket.gethostname())
 app = Flask(__name__)
 
