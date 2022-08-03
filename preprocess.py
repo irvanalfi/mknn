@@ -74,10 +74,7 @@ def pelabelanOtomatis():
     data = [db.get_hasil_training(), db.get_hasil_testing()]
 
     for index, i in enumerate(data):
-        label = ""
         for index_2, tweet in enumerate(i):
-            dictTweet = {}
-            # bersih2 regex dan url
             analysis = TextBlob(tweet)
             if analysis.sentiment.polarity > 0.0:
                 label="positif"

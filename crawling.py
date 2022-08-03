@@ -60,7 +60,6 @@ def crawling():
                     hasil_tweet.append(dictTweet)
                     hasil_isi_tweet.append(tweet_bersih)
                     tweetCount += 1
-
             maxId = newTweets[len(newTweets) - 1].id
 
         # pembuatan file csv
