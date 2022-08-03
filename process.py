@@ -1,7 +1,5 @@
 from time import time
 from math import sqrt, pow
-
-import pandas
 import pandas as pd
 from IPython.display import display
 import numpy as np
@@ -15,11 +13,6 @@ from db import get_polaritas
 def showDataTraining():
     df = pd.read_csv("Upload/testing.csv", encoding="ISO-8859-1")
     df.head()
-
-
-def countDataTraining():
-    pass
-    #TODO
 
 
 def tfidf(tweet_bersih):
@@ -146,6 +139,9 @@ def ranking(df1, df2, k):
     a.sort()
     label = np.argsort(label)
     df2 = pd.DataFrame(a[:k])
+    df3 = pd.DataFrame(label)
+    weightvoting = pd.concat([df3, df2], ignore_index=True)
+    weightvoting.to_csv('C:/Users/IRVAN/backendmknn/Upload/weightvoting.csv', index=False)
     return df2, label[:k]
 
 

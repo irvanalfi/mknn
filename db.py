@@ -1,6 +1,4 @@
 import sqlite3
-from IPython.display import display
-from nltk.sem.chat80 import sql_query
 import pandas as pd
 import preprocess
 
@@ -145,8 +143,6 @@ def get_label(data):
     for x in row:
         for y in x:
             temp.append(y)
-    dd = pd.DataFrame(temp)
-    dd.to_csv('C:/Users/IRVAN/backendmknn/Upload/traininglabel.csv', index=False)
     return temp
 
 
@@ -183,15 +179,12 @@ def get_polaritas(nama_polaritas):
     for x in row:
         for y in x:
             temp.append(y)
-
     return temp
 
 
 def count_polaritas(nama_sentimen, nama_tabel, nama_kolom):
     conn, cursor = get_conn_cursor()
-
     query = "SELECT COUNT(" + nama_kolom + ") FROM " + nama_tabel \
             + " WHERE " + nama_kolom + " = '" + nama_sentimen + "' "
-
     row = cursor.execute(query).fetchone()[0]
     return row
