@@ -139,8 +139,8 @@ def ranking(df1, df2, k):
     a.sort()
     label = np.argsort(label)
     df2 = pd.DataFrame(a[:k])
-    df3 = pd.DataFrame(label)
-    weightvoting = pd.concat([df3, df2], ignore_index=True)
+    df3 = pd.DataFrame(label[:k])
+    weightvoting = pd.concat([df3, df2], axis=1)
     weightvoting.to_csv('C:/Users/IRVAN/backendmknn/Upload/weightvoting.csv', index=False)
     return df2, label[:k]
 

@@ -53,6 +53,8 @@ if __name__ == "__main__":
             lbl2 = []
             for i in label:
                 lbl2.append(label_train[i])
+            labelterdekat = pandas.DataFrame(lbl2)
+            labelterdekat.to_csv('C:/Users/IRVAN/backendmknn/Upload/labelterdekat.csv')
             lbl.append(most_frequent(lbl2))
             updateData(nama_polaritas, most_frequent(lbl2), idx)
             idx += 1
