@@ -3,6 +3,9 @@ import json
 import sqlite3
 import socket
 from db import *
+from process import *
+import pandas as pd
+
 
 my_ip = socket.gethostbyname(socket.gethostname())
 app = Flask(__name__)
@@ -59,6 +62,20 @@ def training_data():
 @app.route('/testing-data', methods=['GET', 'POST'])
 def testing_data():
     return jsonify(db_get_all_testing())
+
+@app.route('/test-akurasi', methods=['GET', 'POST'])
+def test_akurasi():
+    cm_list = []
+    key = ""
+    k = [3, 5, 7, 9, 11, 13, 15, 17, 19, 21]
+    for i in k:
+        print("pengujian k" + str(i))
+        cm_list.append(testaccuracy("polaritas_awal", "polaritas_akhir_k" + str(i)))
+        key += testaccuracy("polaritas_awal", "polaritas_akhir_k" + str(i))+"\n"
+    df = pd.DataFrame(cm_list).to_json(orient="index")
+    print(key)
+    return cm_list
+
 
 if __name__ == "__main__":
     app.run(host=my_ip)

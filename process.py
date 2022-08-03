@@ -1,5 +1,7 @@
 from time import time
 from math import sqrt, pow
+
+import pandas
 import pandas as pd
 from IPython.display import display
 import numpy as np
@@ -159,6 +161,21 @@ def most_frequent(List):
 
     return num
 
+def classification_report_csv(report):
+    report_data = []
+    lines = report.split('\n')
+    for line in lines[2:-3]:
+        row = {}
+        row_data = line.split('      ')
+        row['class'] = row_data[0]
+        row['precision'] = row_data[1]
+        row['recall'] = row_data[2]
+        row['f1_score'] = row_data[3]
+        row['support'] = row_data[4]
+        report_data.append(row)
+    dataframe = pd.DataFrame.from_dict(report_data)
+    dataframe.to_csv('C:/Users/IRVAN/backendmknn/Upload/classification_report.csv', index = False)
+
 
 # Menghitung tingkat akurasi mknn dengan confusion matrix
 def testaccuracy(polaritas_awal, polaritas_k):
@@ -168,11 +185,12 @@ def testaccuracy(polaritas_awal, polaritas_k):
     y_pred = polaritas_k
     y_test = polaritas_awal
     test_time = time() - t
-    print("test time:  %0.3fs" % test_time)
-    # compute the performance measures
-    score1 = metrics.accuracy_score(y_test, y_pred)
-    print("accuracy:   %0.3f" % score1)
-    print(metrics.classification_report(y_test, y_pred, target_names=['Positif', 'Negatif', 'Netral']))
-    print("confusion matrix:")
+    data_report = metrics.classification_report(y_test, y_pred, output_dict=True)
+    df = pd.DataFrame(data_report).transpose()
+    a = df.to_json(orient='index')
+    print('+---------------------------------------------------------+')
+    print(metrics.classification_report(y_test, y_pred))
+    print('+---------------------------------------------------------+')
     print(metrics.confusion_matrix(y_test, y_pred))
-    print('------------------------------')
+    print('+---------------------------------------------------------+')
+    return a
