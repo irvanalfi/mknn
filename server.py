@@ -74,7 +74,7 @@ def test_akurasi():
         key += testaccuracy("polaritas_awal", "polaritas_akhir_k" + str(i))+"\n"
     df = pd.DataFrame(cm_list).to_json(orient="index")
     print(key)
-    return cm_list
+    return jsonify(cm_list)
 
 
 if __name__ == "__main__":
