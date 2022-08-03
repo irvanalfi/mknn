@@ -195,3 +195,25 @@ def count_polaritas(nama_sentimen, nama_tabel, nama_kolom):
 
     row = cursor.execute(query).fetchone()[0]
     return row
+
+
+def get_user_by_uname_pass(username, password):
+    conn, cursor = get_conn_cursor()
+    query = "SELECT user.id_user, user.username, user.nama, user.email, user.avatar FROM user " \
+            "WHERE user.username = '" + username + "' AND user.password = '" + password + "'"
+
+    row = cursor.execute(query).fetchone()
+
+    if row is not None:
+        data = {
+            'id_user': row[0],
+            'username': row[1],
+            'nama': row[2],
+            'email': row[3],
+            'avatar': row[4],
+        }
+    else:
+        data = {}
+    print(data)
+
+    return data
