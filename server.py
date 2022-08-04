@@ -5,7 +5,7 @@ import socket
 from db import *
 from process import *
 import pandas as pd
-
+import hashlib
 
 my_ip = socket.gethostbyname(socket.gethostname())
 app = Flask(__name__)
@@ -14,6 +14,16 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return "server berjalan"
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    data = get_user_by_uname_pass(username, password)
+
+    return jsonify(data)
 
 
 @app.route('/dashboard-data', methods=['GET', 'POST'])
@@ -63,6 +73,7 @@ def training_data():
 def testing_data():
     return jsonify(db_get_all_testing())
 
+
 @app.route('/test-akurasi', methods=['GET', 'POST'])
 def test_akurasi():
     cm_list = []
@@ -71,7 +82,7 @@ def test_akurasi():
     for i in k:
         print("pengujian k" + str(i))
         cm_list.append(testaccuracy("polaritas_awal", "polaritas_akhir_k" + str(i)))
-        key += testaccuracy("polaritas_awal", "polaritas_akhir_k" + str(i))+"\n"
+        key += testaccuracy("polaritas_awal", "polaritas_akhir_k" + str(i)) + "\n"
     df = pd.DataFrame(cm_list).to_json(orient="index")
     print(key)
     return jsonify(cm_list)
@@ -80,3 +91,4 @@ def test_akurasi():
 if __name__ == "__main__":
     app.run(host=my_ip)
     # training_data()
+    # login()
