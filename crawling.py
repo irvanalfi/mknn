@@ -2,6 +2,8 @@ import tweepy
 import csv
 import re
 from textblob import TextBlob
+import emoji
+import contractions
 
 api_key = 'JgjxyWz2fnf69f0QBIf3XWHTb'
 api_key_secret = 'TSVN9Gg6j12Xz5D0YlSNXf2D2mQ8iI7n59mqUBjCsrFYMZeY05'
@@ -14,10 +16,10 @@ api = tweepy.API(authentication, wait_on_rate_limit=True)
 
 tweetsPerQry = 100
 maxTweets = 5000
-keywords = ["#windows11", "windows 11"]
+
 
 # proses crawling
-def crawling():
+def crawling(keywords):
     # cari data berdasarkan keyword
     for search_key in keywords:
         tweetCount = 0
@@ -40,9 +42,21 @@ def crawling():
             for tweet in newTweets:
                 dictTweet = {}
                 dictTweet["username"] = tweet.user.screen_name
-                # bersih2 regex dan url
-                tweet_bersih = ' '.join(
-                    re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet.full_text).split())
+                # bersih2 username (@blabla), hapus selain alfabet dan hapus url
+                tweet_bersih = ''.join(re.sub("(@[\w]+)|(\w+:\/\/\S+)", " ", tweet.full_text).split())
+                # ubah emoji menjadi text
+                tweet_bersih = emoji.demojize(tweet_bersih)
+                # ubah perulangan huruf yang banyak menjadi dua huruf
+                tweet_bersih = re.sub(r'(.)\1+', r'\1\1', tweet_bersih)
+                # hapus selain abjad
+                tweet_bersih = re.sub(r'[^a-zA-Z]', ' ', tweet_bersih)
+                # hapus hastag
+                tweet_bersih = re.sub('#+', ' ', tweet_bersih)
+                # ubah singkatan menjadi kepanjangan
+                tweet_bersih = contractions.fix(tweet_bersih)
+                # lowercase
+                tweet_bersih = tweet_bersih.lower()
+
                 analysis = TextBlob(tweet_bersih)
                 # penghapusan retweet
                 if tweet_bersih.startswith("RT"):
