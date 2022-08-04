@@ -6,6 +6,8 @@ from db import *
 from process import *
 import pandas as pd
 import hashlib
+import csv
+import json
 
 my_ip = socket.gethostbyname(socket.gethostname())
 app = Flask(__name__)
@@ -104,21 +106,23 @@ def tfidf_proses():
 
 @app.route('/halaman-pengujian', methods=['GET', 'POST'])
 def halaman_proses_pengujian():
-    preprocessing = db_get_all_testing()
-    tfidf = pd.read_csv('C:/Users/IRVAN/backendmknn/Upload/tfidf.csv', sep=';')
-    euclideanDTDT = pd.read_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', sep=';')
-    euclideanDTDS = pd.read_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtds.csv', sep=';')
-    validitas = pd.read_csv('C:/Users/IRVAN/backendmknn/Upload/valargsmalleuclideandtdt.csv', sep=';')
-    weightvoting = pd.read_csv('C:/Users/IRVAN/backendmknn/Upload/weightvoting.csv', sep=';')
-    classterdekat = pd.read_csv('C:/Users/IRVAN/backendmknn/Upload/labelterdekat.csv', sep=';')
+    data_testing = db_get_all_testing()
+    data_training = db_get_all_training()
+    # tfidf = pd.read_csv('Upload/tfidf_1.csv')
+    # tfidf = tfidf.to_json()
+    #
+    # euclideanDTDT = pd.read_csv('Upload/euclideandtdt.csv', sep=';')
+    # euclideanDTDS = pd.read_csv('Upload/euclideandtds.csv', sep=';')
+    #
+    # validitas = pd.read_csv('Upload/valargsmalleuclideandtdt.csv', sep=';')
+    # weightvoting = pd.read_csv('Upload/weightvoting.csv', sep=';')
+    # classterdekat = pd.read_csv('Upload/labelterdekat.csv', sep=';')
+    #
+    # print(tfidf)
+
     data = {
-        "preprocessing": jsonify(preprocessing),
-        "tfidf": tfidf,
-        "euclideanDTDT": euclideanDTDT,
-        "euclideanDTDS": euclideanDTDS,
-        "validitas": validitas,
-        "weightvoting": weightvoting,
-        "class_terdekat": classterdekat
+        "data_testing": data_testing,
+        "data_training": data_training,
     }
     return jsonify(data)
 
@@ -181,3 +185,4 @@ def test_akurasi():
 
 if __name__ == "__main__":
     app.run(host=my_ip)
+    # halaman_proses_pengujian()
