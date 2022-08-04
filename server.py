@@ -86,17 +86,96 @@ def testing_data():
     return jsonify(db_get_all_testing())
 
 
+@app.route('/import-training', methods=['GET', 'POST'])
+def import_training():
+    db_import_data_training("Upload/training.csv")
+
+
+@app.route('/import-testing', methods=['GET', 'POST'])
+def import_testing():
+    db_import_data_testing("Upload/testing.csv")
+
+
+@app.route('/tfidf-proses', methods=['GET', 'POST'])
+def tfidf_proses():
+    # proses tf-idf training dan testing
+    tfidf(get_hasil())
+
+
+@app.route('/halaman-pengujian', methods=['GET', 'POST'])
+def halaman_proses_pengujian():
+    preprocessing = db_get_all_testing()
+    tfidf = pd.read_csv('C:/Users/IRVAN/backendmknn/Upload/tfidf.csv', sep=';')
+    euclideanDTDT = pd.read_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', sep=';')
+    euclideanDTDS = pd.read_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtds.csv', sep=';')
+    validitas = pd.read_csv('C:/Users/IRVAN/backendmknn/Upload/valargsmalleuclideandtdt.csv', sep=';')
+    weightvoting = pd.read_csv('C:/Users/IRVAN/backendmknn/Upload/weightvoting.csv', sep=';')
+    classterdekat = pd.read_csv('C:/Users/IRVAN/backendmknn/Upload/labelterdekat.csv', sep=';')
+    data = {
+        "preprocessing": jsonify(preprocessing),
+        "tfidf": tfidf,
+        "euclideanDTDT": euclideanDTDT,
+        "euclideanDTDS": euclideanDTDS,
+        "validitas": validitas,
+        "weightvoting": weightvoting,
+        "class_terdekat": classterdekat
+    }
+    return jsonify(data)
+
+
+@app.route('/pengujian', methods=['GET', 'POST'])
+def pengujian():
+    # read csv hasil tf-idf
+    df = pd.read_csv('C:/Users/IRVAN/backendmknn/Upload/tfidf.csv', sep=';')
+    # membagi hasil tf idf dari total data set ke 600 training, 400 testing
+    split1 = (df.shape[0] * 6) / 10
+    # baca hasil split tf-idf data training dan testing
+    df1 = pd.DataFrame(df.iloc[:int(split1)])
+    df2 = pd.DataFrame(df.iloc[int(split1):])
+    # proses jarak euclidean dan menyimpan data ke dalam file csv
+    # jarak_dtdt = jarakeuclideanDTDT(df1)
+    # jarak_dtds = jarakeuclideanDTDS(df1, df2, split1)
+    # read csv jarak_dtdt dan jarak_dtds
+    jarak_dtdt = pd.read_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', sep=',')
+    jarak_dtds = pd.read_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtds.csv', sep=',')
+    # mengurutkan data jarak_dtdt
+    small_dtdt = small(jarak_dtdt)
+    # jumlah k yang digunakan
+    k = [3, 5, 7, 9, 11, 13, 15, 17, 19, 21]
+    for j in tqdm(k):
+        idx = 1
+        nama_polaritas = "polaritas_akhir_k" + str(j)
+        k_dtdt = k_euclidean(small_dtdt, j)
+        k_dtdt.to_csv('C:/Users/IRVAN/backendmknn/Upload/k11euclideandtdt.csv', index=False)
+        lokasi_dtdt = lokasi(jarak_dtdt, j)
+        lokasi_dtdt.to_csv('C:/Users/IRVAN/backendmknn/Upload/lokasiargsmalleuclideandtdt.csv', index=False)
+        label_train = get_label("training")
+        label_test = get_polaritas("polaritas_awal")
+        pelabelan_dtdt = pelabelan(lokasi_dtdt, label_train)
+        pelabelan_dtdt.to_csv('C:/Users/IRVAN/backendmknn/Upload/labelargsmalleuclideandtdt.csv', index=False)
+        validitas_dtdt = validitas(pelabelan_dtdt, label_train)
+        validitas_dtdt.to_csv('C:/Users/IRVAN/backendmknn/Upload/valargsmalleuclideandtdt.csv', index=False)
+
+        lbl = []
+        for i in tqdm(range(len(jarak_dtds.iloc[0])), leave=False):
+            rank, label = ranking(validitas_dtdt, jarak_dtds[str(i)], j)
+            lbl2 = []
+            for i in label:
+                lbl2.append(label_train[i])
+            labelterdekat = pd.DataFrame(lbl2)
+            labelterdekat.to_csv('C:/Users/IRVAN/backendmknn/Upload/labelterdekat.csv')
+            lbl.append(most_frequent(lbl2))
+            updateData(nama_polaritas, most_frequent(lbl2), idx)
+            idx += 1
+
+
 @app.route('/test-akurasi', methods=['GET', 'POST'])
 def test_akurasi():
     cm_list = []
-    key = ""
     k = [3, 5, 7, 9, 11, 13, 15, 17, 19, 21]
     for i in k:
         print("pengujian k" + str(i))
         cm_list.append(testaccuracy("polaritas_awal", "polaritas_akhir_k" + str(i)))
-        key += testaccuracy("polaritas_awal", "polaritas_akhir_k" + str(i)) + "\n"
-    df = pd.DataFrame(cm_list).to_json(orient="index")
-    print(key)
     return jsonify(cm_list)
 
 
