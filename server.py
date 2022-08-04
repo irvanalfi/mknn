@@ -23,7 +23,19 @@ def login():
 
     data = get_user_by_uname_pass(username, password)
 
-    return jsonify(data)
+    if bool(data):
+        response = {
+            'status': 'success',
+            'data': data
+        }
+
+    else:
+        response = {
+            'status': 'failed',
+            'data': data
+        }
+
+    return response
 
 
 @app.route('/dashboard-data', methods=['GET', 'POST'])
@@ -90,5 +102,3 @@ def test_akurasi():
 
 if __name__ == "__main__":
     app.run(host=my_ip)
-    # training_data()
-    # login()

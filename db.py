@@ -207,6 +207,4 @@ def get_user_by_uname_pass(username, password):
         }
     else:
         data = {}
-    print(data)
-
     return data
