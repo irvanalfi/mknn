@@ -217,17 +217,29 @@ def halaman_user():
 
 @app.route('/halaman-updateu', methods=['GET', 'POST'])
 def halaman_update_user():
-    id = request.form.get("id_user")
-    print(id)
+    id = request.form.get("id")
     data = get_user_by_id(id)
     if bool(data):
         response = {
-            'status': 'success',
             'data': data
         }
     else:
         response = {
-            'status': 'failed',
+            'data': data
+        }
+    return response
+
+
+@app.route('/update-user-proses', methods=['GET', 'POST'])
+def update_user_proses():
+    id = request.form.get("id")
+    data = get_user_by_id(id)
+    if bool(data):
+        response = {
+            'data': data
+        }
+    else:
+        response = {
             'data': data
         }
     return response
@@ -235,7 +247,7 @@ def halaman_update_user():
 
 @app.route('/dell-user', methods=['GET', 'POST'])
 def dell_user():
-    id = request.form.get("id_user")
+    id = request.form.get("id")
     data = dell_user(id)
     if bool(data):
         response = {

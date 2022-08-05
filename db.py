@@ -248,8 +248,7 @@ def get_all_user():
             user["nama"] = i[1]
             user["username"] = i[2]
             user["email"] = i[3]
-            user["avatar"] = i[4]
-            user["password"] = i[5]
+            user["password"] = i[4]
             users.append(user)
     except:
         users = []
@@ -258,6 +257,5 @@ def get_all_user():
 
 def dell_user(id):
     conn, cursor = get_conn_cursor()
-    query = "DELETE FROM user " \
-            "WHERE user.id_user = '" + id + "'"
+    query = "DELETE FROM user WHERE user.id_user = '" + id + "'"
     row = cursor.execute(query).fetchone()
