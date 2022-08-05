@@ -10,11 +10,6 @@ from sklearn.feature_extraction.text import TfidfTransformer
 from db import get_polaritas
 
 
-def showDataTraining():
-    df = pd.read_csv("Upload/testing.csv", encoding="ISO-8859-1")
-    df.head()
-
-
 def tfidf(tweet_bersih):
     bow_transformer = CountVectorizer().fit(tweet_bersih)
     print(bow_transformer.vocabulary_)
@@ -32,7 +27,7 @@ def tfidf(tweet_bersih):
     print(title_tfidf.shape)
     dd = pd.DataFrame(data=title_tfidf.toarray(), columns=tokens)
     display(dd)
-    dd.to_csv('C:/Users/IRVAN/backendmknn/Upload/tfidf.csv', index= False)
+    dd.to_csv('C:/Users/IRVAN/backendmknn/Upload/tfidf.csv', index=False)
     return X
 
 
@@ -45,7 +40,7 @@ def jarakeuclideanDTDT(df):
             sum = 0
             if i != j:
                 for k in df:
-                    sum += pow(df[k][i]-df[k][j], 2)
+                    sum += pow(df[k][i] - df[k][j], 2)
                 dtdt.append(sqrt(sum))
             else:
                 dtdt.append(0)
@@ -54,8 +49,9 @@ def jarakeuclideanDTDT(df):
     x.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', index=False, float_format="%.2f")
     return x
 
+
 # @jit(target_backend=device_controller(0))
-def jarakeuclideanDTDS(dtdf,dsdf,split):
+def jarakeuclideanDTDS(dtdf, dsdf, split):
     df2 = []
     dsdf.reset_index()
     for i in tqdm(range(int(dtdf.shape[0]))):
@@ -63,7 +59,7 @@ def jarakeuclideanDTDS(dtdf,dsdf,split):
         for j in tqdm(range(int(dsdf[dsdf.columns[0]].count())), leave=False):
             sum = 0
             for k in dtdf:
-                sum += pow(dtdf[str(k)][i]-dsdf[str(k)][split+j], 2)
+                sum += pow(dtdf[str(k)][i] - dsdf[str(k)][split + j], 2)
             dtdt.append(sqrt(sum))
         df2.append(dtdt)
     x = pd.DataFrame(df2)
@@ -73,37 +69,37 @@ def jarakeuclideanDTDS(dtdf,dsdf,split):
 
 def small(df):
     a = df.iloc[0]
-    array = [0]*len(a) # Membuat array kosong untuk menyimpan data per baris
+    array = [0] * len(a)  # Membuat array kosong untuk menyimpan data per baris
     for x in range(len(a)):
-        array[x]=df.iloc[[x]] # Menyimpan setiap kolumn dalam index array
-        array[x] = array[x].values.tolist() # Merubah values menjadi dalam bentuk list
-        array[x] = array[x][0] # Menghilangkan Bracket
-        array[x].sort() # Proses sorting data
+        array[x] = df.iloc[[x]]  # Menyimpan setiap kolumn dalam index array
+        array[x] = array[x].values.tolist()  # Merubah values menjadi dalam bentuk list
+        array[x] = array[x][0]  # Menghilangkan Bracket
+        array[x].sort()  # Proses sorting data
     df2 = pd.DataFrame(array)
     return df2
 
 
 def k_euclidean(df, k):
     a = df.iloc[0]
-    array = [0]*len(a) # Membuat array kosong untuk menyimpan data per baris
+    array = [0] * len(a)  # Membuat array kosong untuk menyimpan data per baris
     for x in range(len(a)):
-        array[x]=df.iloc[[x]] # Menyimpan setiap kolumn dalam index array
-        array[x] = array[x].values.tolist() # Merubah values menjadi dalam bentuk list
-        array[x] = array[x][0] # Menghilangkan Bracket
-        array[x] = array[x][1:k+1]
+        array[x] = df.iloc[[x]]  # Menyimpan setiap kolumn dalam index array
+        array[x] = array[x].values.tolist()  # Merubah values menjadi dalam bentuk list
+        array[x] = array[x][0]  # Menghilangkan Bracket
+        array[x] = array[x][1:k + 1]
     df2 = pd.DataFrame(array)
     return df2
 
 
-def lokasi(df,k):
+def lokasi(df, k):
     a = df.iloc[0]
-    array=[0]*len(a) # Membuat array kosong untuk menyimpan data per baris
+    array = [0] * len(a)  # Membuat array kosong untuk menyimpan data per baris
     for x in range(len(a)):
-        array[x]= df.iloc[[x]] # Menyimpan setiap kolumn dalam index array
-        array[x] = array[x].values.tolist() # Merubah values menjadi dalam bentuk list
-        array[x] = array[x][0] # Menghilangkan Bracket
-        np_array = np.array(array[x]).argsort()[1:k+1]
-        array[x] = np_array # Proses sorting data
+        array[x] = df.iloc[[x]]  # Menyimpan setiap kolumn dalam index array
+        array[x] = array[x].values.tolist()  # Merubah values menjadi dalam bentuk list
+        array[x] = array[x][0]  # Menghilangkan Bracket
+        np_array = np.array(array[x]).argsort()[1:k + 1]
+        array[x] = np_array  # Proses sorting data
     df2 = pd.DataFrame(array)
     return df2
 
@@ -119,13 +115,13 @@ def pelabelan(df1, df2):
 def validitas(df1, df2):
     a = df1[df1.columns[0]].count()
     n = len(df1.iloc[0])
-    array=[0]*a # Membuat array kosong untuk menyimpan data per baris
+    array = [0] * a  # Membuat array kosong untuk menyimpan data per baris
     for x, y in df1.iterrows():
         sum = 0
         for z in df1:
             if y[z] == df2[x]:
                 sum += 1
-            result = 1/(n)*(sum)
+            result = 1 / (n) * (sum)
             array[x] = result
     df2 = pd.DataFrame(array)
     return df2
@@ -133,7 +129,7 @@ def validitas(df1, df2):
 
 def ranking(df1, df2, k):
     for x, y in df1.iterrows():
-        df1[0][x] = y[0]*(1/(df2[x]+0.5))
+        df1[0][x] = y[0] * (1 / (df2[x] + 0.5))
     a = df1[0].values.tolist()
     label = np.array(a)
     a.sort()
@@ -157,6 +153,7 @@ def most_frequent(List):
 
     return num
 
+
 def classification_report_csv(report):
     report_data = []
     lines = report.split('\n')
@@ -170,7 +167,7 @@ def classification_report_csv(report):
         row['support'] = row_data[4]
         report_data.append(row)
     dataframe = pd.DataFrame.from_dict(report_data)
-    dataframe.to_csv('C:/Users/IRVAN/backendmknn/Upload/classification_report.csv', index = False)
+    dataframe.to_csv('C:/Users/IRVAN/backendmknn/Upload/classification_report.csv', index=False)
 
 
 # Menghitung tingkat akurasi mknn dengan confusion matrix
@@ -180,13 +177,7 @@ def testaccuracy(polaritas_awal, polaritas_k):
     t = time()
     y_pred = polaritas_k
     y_test = polaritas_awal
-    test_time = time() - t
     data_report = metrics.classification_report(y_test, y_pred, output_dict=True)
     df = pd.DataFrame(data_report).transpose()
     a = df.to_json(orient='index')
-    print('+---------------------------------------------------------+')
-    print(metrics.classification_report(y_test, y_pred))
-    print('+---------------------------------------------------------+')
-    print(metrics.confusion_matrix(y_test, y_pred))
-    print('+---------------------------------------------------------+')
     return a

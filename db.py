@@ -205,9 +205,7 @@ def get_user_by_uname_pass(username, password):
     conn, cursor = get_conn_cursor()
     query = "SELECT user.id_user, user.username, user.nama, user.email, user.avatar FROM user " \
             "WHERE user.username = '" + username + "' AND user.password = '" + password + "'"
-
     row = cursor.execute(query).fetchone()
-
     if row is not None:
         data = {
             'id_user': row[0],
@@ -219,3 +217,47 @@ def get_user_by_uname_pass(username, password):
     else:
         data = {}
     return data
+
+
+def get_user_by_id(id):
+    conn, cursor = get_conn_cursor()
+    query = "SELECT * FROM user WHERE user.id_user = '" + str(id) + "'"
+    row = cursor.execute(query).fetchone()
+    if row is not None:
+        data = {
+            'id_user': row[0],
+            'username': row[1],
+            'nama': row[2],
+            'email': row[3],
+            'avatar': row[4],
+        }
+    else:
+        data = {}
+    return data
+
+
+def get_all_user():
+    users = []
+    try:
+        conn, cursor = get_conn_cursor()
+        sql_query = "SELECT * FROM user"
+        rows = cursor.execute(sql_query).fetchall()
+        for i in rows:
+            user = {}
+            user["id_user"] = i[0]
+            user["nama"] = i[1]
+            user["username"] = i[2]
+            user["email"] = i[3]
+            user["avatar"] = i[4]
+            user["password"] = i[5]
+            users.append(user)
+    except:
+        users = []
+    return users
+
+
+def dell_user(id):
+    conn, cursor = get_conn_cursor()
+    query = "DELETE FROM user " \
+            "WHERE user.id_user = '" + id + "'"
+    row = cursor.execute(query).fetchone()
