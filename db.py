@@ -96,6 +96,17 @@ def db_get_all_testing():
     return tests
 
 
+def db_get_count_polaritas(nilai_k, nama_polaritas):
+    conn, cursor = get_conn_cursor()
+    query = "SELECT count(polaritas_akhir_" + nilai_k + ") " \
+                                                        "FROM testing " \
+                                                        "WHERE polaritas_akhir_" + nilai_k + " = " + "'" \
+            + nama_polaritas + "'"
+
+    row = cursor.execute(query).fetchone()[0]
+    return row
+
+
 def get_hasil():
     conn, cursor = get_conn_cursor()
     sql_query = "select tweet_hasil FROM training"

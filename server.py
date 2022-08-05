@@ -78,6 +78,44 @@ def dashboard_data():
     return jsonify(data)
 
 
+@app.route('/dashboard-chart', methods=['GET', 'POST'])
+def dashboard_chart():
+    polaritas_netral = []
+    polaritas_positif = []
+    polaritas_negatif = []
+
+    sentimen = ['netral', 'positif', 'negatif']
+    k = [3, 5, 7, 9, 11, 13, 15, 17, 19, 21]
+
+    for i in k:
+        temp_netral = db_get_count_polaritas('k' + str(i), sentimen[0])
+        polaritas_netral.append(temp_netral)
+
+    for i in k:
+        temp_positif = db_get_count_polaritas('k' + str(i), sentimen[1])
+        polaritas_positif.append(temp_positif)
+
+    for i in k:
+        temp_negatif = db_get_count_polaritas('k' + str(i), sentimen[2])
+        polaritas_negatif.append(temp_negatif)
+
+    polaritas_netral = ",".join([str(i) for i in polaritas_netral])
+    polaritas_positif = ",".join([str(i) for i in polaritas_positif])
+    polaritas_negatif = ",".join([str(i) for i in polaritas_negatif])
+
+    data = {
+        'polaritas_positif': polaritas_positif,
+        'polaritas_negatif': polaritas_negatif,
+        'polaritas_netral': polaritas_netral
+    }
+    #
+    return jsonify(data)
+
+    # # lst = [81, 9, 4, 1]
+    # # s = ",".join([str(i) for i in lst])
+    # print(polaritas_netral)
+
+
 @app.route('/training-data', methods=['GET', 'POST'])
 def training_data():
     return jsonify(db_get_all_training())
@@ -108,17 +146,6 @@ def tfidf_proses():
 def halaman_proses_pengujian():
     data_testing = db_get_all_testing()
     data_training = db_get_all_training()
-    # tfidf = pd.read_csv('Upload/tfidf_1.csv')
-    # tfidf = tfidf.to_json()
-    #
-    # euclideanDTDT = pd.read_csv('Upload/euclideandtdt.csv', sep=';')
-    # euclideanDTDS = pd.read_csv('Upload/euclideandtds.csv', sep=';')
-    #
-    # validitas = pd.read_csv('Upload/valargsmalleuclideandtdt.csv', sep=';')
-    # weightvoting = pd.read_csv('Upload/weightvoting.csv', sep=';')
-    # classterdekat = pd.read_csv('Upload/labelterdekat.csv', sep=';')
-    #
-    # print(tfidf)
 
     data = {
         "data_testing": data_testing,
@@ -185,4 +212,4 @@ def test_akurasi():
 
 if __name__ == "__main__":
     app.run(host=my_ip)
-    # halaman_proses_pengujian()
+    # dashboard_chart()
