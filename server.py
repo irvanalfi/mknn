@@ -188,9 +188,10 @@ def halaman_user():
     return jsonify(get_all_user())
 
 
-@app.route('/halaman-update-user', methods=['GET', 'POST'])
+@app.route('/halaman-updateu', methods=['GET', 'POST'])
 def halaman_update_user():
     id = request.form.get("id_user")
+    print(id)
     data = get_user_by_id(id)
     if bool(data):
         response = {
