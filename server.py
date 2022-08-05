@@ -183,6 +183,43 @@ def test_akurasi():
     return jsonify(cm_list)
 
 
+@app.route('/halaman-user', methods=['GET', 'POST'])
+def halaman_user():
+    return jsonify(get_all_user())
+
+
+@app.route('/halaman-update-user', methods=['GET', 'POST'])
+def halaman_update_user():
+    id = request.form.get("id_user")
+    data = get_user_by_id(id)
+    if bool(data):
+        response = {
+            'status': 'success',
+            'data': data
+        }
+    else:
+        response = {
+            'status': 'failed',
+            'data': data
+        }
+    return response
+
+
+@app.route('/dell-user', methods=['GET', 'POST'])
+def dell_user():
+    id = request.form.get("id_user")
+    data = dell_user(id)
+    if bool(data):
+        response = {
+            'status': 'success'
+        }
+    else:
+        response = {
+            'status': 'failed'
+        }
+    return response
+
+
 if __name__ == "__main__":
     app.run(host=my_ip)
     # halaman_proses_pengujian()
