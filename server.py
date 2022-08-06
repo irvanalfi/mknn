@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from werkzeug.utils import secure_filename
 import json
 import sqlite3
 import socket
@@ -110,14 +111,32 @@ def testing_data():
 
 @app.route('/import-training', methods=['GET', 'POST'])
 def import_training():
-    data = request.form.getlist('0[username]');
-    print(data)
-    # db_import_data_training(data)
+    file = request.files['file']
+    file_name = secure_filename(file.filename)
+    file_path = 'Upload/' + file_name
+    file.save(file_path)
+
+    db_delete_all("training")
+
+    db_import_data_training(file_path)
+
+    print(file_path)
+
+    return file_path
 
 
 @app.route('/import-testing', methods=['GET', 'POST'])
 def import_testing():
-    db_import_data_testing("Upload/testing.csv")
+    file = request.files['file']
+    file_name = secure_filename(file.filename)
+    file_path = 'Upload/' + file_name
+    file.save(file_path)
+
+    db_delete_all("testing")
+
+    db_import_data_testing(file_path)
+
+    return file_path
 
 
 @app.route('/tfidf-proses', methods=['GET', 'POST'])
@@ -253,8 +272,7 @@ def update_user_proses():
 @app.route('/dell-user', methods=['GET', 'POST'])
 def dell_user():
     id = request.form.get("id")
-    # print(id)
-    data = dell_user(id)
+    data = db_dell_user(id)
     if data == "success":
         response = {
             'status': 'success'
@@ -263,7 +281,24 @@ def dell_user():
         response = {
             'status': 'failed'
         }
-    return response
+    return jsonify(response)
+
+
+@app.route('/dell-all', methods=['GET', 'POST'])
+def dell_all():
+    tabel = request.form.get("tabel")
+    data = db_delete_all(tabel)
+
+    if data == "success":
+        response = {
+            'status': 'success'
+        }
+    else:
+        response = {
+            'status': 'failed'
+        }
+
+    return jsonify(response)
 
 
 if __name__ == "__main__":

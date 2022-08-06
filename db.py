@@ -33,6 +33,21 @@ def db_import_data_training(path):
     print("Success import data training from csv")
 
 
+def db_delete_all(tabel):
+    try:
+        conn, cursor = get_conn_cursor()
+        query = "DELETE FROM " + tabel
+        cursor.execute(query)
+        conn.commit()
+        message = "success"
+    except:
+        conn.rollback()
+        message = "failed"
+    finally:
+        conn.close()
+    return message
+
+
 def db_import_data_testing(path):
     sql_query = """INSERT INTO testing(username, tweet_asli, clean_text, tokenize, stopword_r, tweet_hasil, 
     polaritas_awal) VALUES(?, ?, ?, ?, ?, ?, ?)"""
@@ -255,7 +270,8 @@ def get_all_user():
 
 def update_user(id, nama, username, email, password):
     conn, cursor = get_conn_cursor()
-    query = "UPDATE user SET nama = '"+nama+"', username = '"+username+"', email = '"+email+"', password = '"+password+"' WHERE id_user ="+str(id)+""
+    query = "UPDATE user SET nama = '" + nama + "', username = '" + username + "', email = '" + email + "', password = '" + password + "' WHERE id_user =" + str(
+        id) + ""
     cursor.execute(query)
     conn.commit()
     data = get_user_by_id(id)
@@ -264,22 +280,21 @@ def update_user(id, nama, username, email, password):
 
 def add_user(nama, username, email, password):
     conn, cursor = get_conn_cursor()
-    query = "INSERT INTO user(nama, username, email, password) VALUES('"+nama+"', '"+username+"', '"+email+"', '"+password+"')"
+    query = "INSERT INTO user(nama, username, email, password) VALUES('" + nama + "', '" + username + "', '" + email + "', '" + password + "')"
     cursor.execute(query)
     conn.commit()
     data = get_user_by_id(cursor.lastrowid)
     return data
 
 
-def dell_user(id):
+def db_dell_user(id):
     print(id)
     try:
         conn, cursor = get_conn_cursor()
         query = "DELETE FROM user WHERE id_user = " + str(id) + ""
-        print(query)
-        # cursor.execute(query)
-        # conn.commit()
-        # message = "success"
+        cursor.execute(query)
+        conn.commit()
+        message = "success"
     except:
         conn.rollback()
         message = "failed"
