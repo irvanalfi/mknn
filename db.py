@@ -26,7 +26,6 @@ def db_import(query, path):
     cursor.close()
 
 
-# insert data training dari file csv ke tabel db
 def db_import_data_training(path):
     sql_query = """INSERT INTO training(username, tweet_asli, clean_text, tokenize, stopword_r, tweet_hasil, 
     polaritas) VALUES(?, ?, ?, ?, ?, ?, ?)"""
@@ -34,7 +33,6 @@ def db_import_data_training(path):
     print("Success import data training from csv")
 
 
-# insert data testing dari file csv ke tabel db
 def db_import_data_testing(path):
     sql_query = """INSERT INTO testing(username, tweet_asli, clean_text, tokenize, stopword_r, tweet_hasil, 
     polaritas_awal) VALUES(?, ?, ?, ?, ?, ?, ?)"""
@@ -203,16 +201,16 @@ def count_polaritas(nama_sentimen, nama_tabel, nama_kolom):
 
 def get_user_by_uname_pass(username, password):
     conn, cursor = get_conn_cursor()
-    query = "SELECT user.id_user, user.username, user.nama, user.email, user.avatar FROM user " \
+    query = "SELECT user.id_user, user.nama, user.username, user.email, user.password FROM user " \
             "WHERE user.username = '" + username + "' AND user.password = '" + password + "'"
     row = cursor.execute(query).fetchone()
     if row is not None:
         data = {
             'id_user': row[0],
-            'username': row[1],
-            'nama': row[2],
+            'nama': row[1],
+            'username': row[2],
             'email': row[3],
-            'avatar': row[4],
+            'password': row[4],
         }
     else:
         data = {}
@@ -226,10 +224,10 @@ def get_user_by_id(id):
     if row is not None:
         data = {
             'id_user': row[0],
-            'username': row[1],
-            'nama': row[2],
+            'nama': row[1],
+            'username': row[2],
             'email': row[3],
-            'avatar': row[4],
+            'password': row[4]
         }
     else:
         data = {}
@@ -255,7 +253,36 @@ def get_all_user():
     return users
 
 
-def dell_user(id):
+def update_user(id, nama, username, email, password):
     conn, cursor = get_conn_cursor()
-    query = "DELETE FROM user WHERE user.id_user = '" + id + "'"
-    row = cursor.execute(query).fetchone()
+    query = "UPDATE user SET nama = '"+nama+"', username = '"+username+"', email = '"+email+"', password = '"+password+"' WHERE id_user ="+str(id)+""
+    cursor.execute(query)
+    conn.commit()
+    data = get_user_by_id(id)
+    return data
+
+
+def add_user(nama, username, email, password):
+    conn, cursor = get_conn_cursor()
+    query = "INSERT INTO user(nama, username, email, password) VALUES('"+nama+"', '"+username+"', '"+email+"', '"+password+"')"
+    cursor.execute(query)
+    conn.commit()
+    data = get_user_by_id(cursor.lastrowid)
+    return data
+
+
+def dell_user(id):
+    print(id)
+    try:
+        conn, cursor = get_conn_cursor()
+        query = "DELETE FROM user WHERE id_user = " + str(id) + ""
+        print(query)
+        # cursor.execute(query)
+        # conn.commit()
+        # message = "success"
+    except:
+        conn.rollback()
+        message = "failed"
+    finally:
+        conn.close()
+    return message

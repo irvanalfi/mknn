@@ -8,6 +8,7 @@ import pandas as pd
 import hashlib
 import csv
 import json
+import requests
 
 my_ip = socket.gethostbyname(socket.gethostname())
 app = Flask(__name__)
@@ -22,21 +23,17 @@ def index():
 def login():
     username = request.form.get("username")
     password = request.form.get("password")
-
     data = get_user_by_uname_pass(username, password)
-
     if bool(data):
         response = {
             'status': 'success',
             'data': data
         }
-
     else:
         response = {
             'status': 'failed',
             'data': data
         }
-
     return response
 
 
@@ -46,19 +43,15 @@ def dashboard_data():
     training_negatif = count_polaritas("negatif", "training", "polaritas")
     training_netral = count_polaritas("netral", "training", "polaritas")
     total_training = training_positif + training_negatif + training_netral
-
     testing_positif = count_polaritas("positif", "testing", "polaritas_awal")
     testing_negatif = count_polaritas("negatif", "testing", "polaritas_awal")
     testing_netral = count_polaritas("netral", "testing", "polaritas_awal")
     total_testing = testing_positif + testing_negatif + testing_netral
-
     dataset_postif = training_positif + testing_positif
     dataset_negatif = training_negatif + testing_negatif
     dataset_netral = training_netral + testing_netral
     total_dataset = dataset_postif + dataset_negatif + dataset_netral
-
     k = ['K3', 'K5', 'K7', 'K9', 'K11', 'K13', 'K15', 'K17', 'K19', 'K21']
-
     data = {
         "jml_training_positif": training_positif,
         "jml_training_negatif": training_negatif,
@@ -83,37 +76,26 @@ def dashboard_chart():
     polaritas_netral = []
     polaritas_positif = []
     polaritas_negatif = []
-
     sentimen = ['netral', 'positif', 'negatif']
     k = [3, 5, 7, 9, 11, 13, 15, 17, 19, 21]
-
     for i in k:
         temp_netral = db_get_count_polaritas('k' + str(i), sentimen[0])
         polaritas_netral.append(temp_netral)
-
     for i in k:
         temp_positif = db_get_count_polaritas('k' + str(i), sentimen[1])
         polaritas_positif.append(temp_positif)
-
     for i in k:
         temp_negatif = db_get_count_polaritas('k' + str(i), sentimen[2])
         polaritas_negatif.append(temp_negatif)
-
     polaritas_netral = ",".join([str(i) for i in polaritas_netral])
     polaritas_positif = ",".join([str(i) for i in polaritas_positif])
     polaritas_negatif = ",".join([str(i) for i in polaritas_negatif])
-
     data = {
         'polaritas_positif': polaritas_positif,
         'polaritas_negatif': polaritas_negatif,
         'polaritas_netral': polaritas_netral
     }
-    #
     return jsonify(data)
-
-    # # lst = [81, 9, 4, 1]
-    # # s = ",".join([str(i) for i in lst])
-    # print(polaritas_netral)
 
 
 @app.route('/training-data', methods=['GET', 'POST'])
@@ -128,7 +110,9 @@ def testing_data():
 
 @app.route('/import-training', methods=['GET', 'POST'])
 def import_training():
-    db_import_data_training("Upload/training.csv")
+    data = request.form.getlist('0[username]');
+    print(data)
+    # db_import_data_training(data)
 
 
 @app.route('/import-testing', methods=['GET', 'POST'])
@@ -205,7 +189,6 @@ def test_akurasi():
     cm_list = []
     k = [3, 5, 7, 9, 11, 13, 15, 17, 19, 21]
     for i in k:
-        print("pengujian k" + str(i))
         cm_list.append(testaccuracy("polaritas_awal", "polaritas_akhir_k" + str(i)))
     return jsonify(cm_list)
 
@@ -213,6 +196,24 @@ def test_akurasi():
 @app.route('/halaman-user', methods=['GET', 'POST'])
 def halaman_user():
     return jsonify(get_all_user())
+
+
+@app.route('/add-user-proses', methods=['GET', 'POST'])
+def add_user_proses():
+    nama = request.form.get("nama")
+    username = request.form.get("username")
+    email = request.form.get("email")
+    password = request.form.get("password")
+    data = add_user(nama, username, email, password)
+    if bool(data):
+        response = {
+            'status': 'success'
+        }
+    else:
+        response = {
+            'status': 'failed'
+        }
+    return response
 
 
 @app.route('/halaman-updateu', methods=['GET', 'POST'])
@@ -233,14 +234,18 @@ def halaman_update_user():
 @app.route('/update-user-proses', methods=['GET', 'POST'])
 def update_user_proses():
     id = request.form.get("id")
-    data = get_user_by_id(id)
+    nama = request.form.get("nama")
+    username = request.form.get("username")
+    email = request.form.get("email")
+    password = request.form.get("password")
+    data = update_user(id, nama, username, email, password)
     if bool(data):
         response = {
-            'data': data
+            'status': 'success'
         }
     else:
         response = {
-            'data': data
+            'status': 'failed'
         }
     return response
 
@@ -248,8 +253,9 @@ def update_user_proses():
 @app.route('/dell-user', methods=['GET', 'POST'])
 def dell_user():
     id = request.form.get("id")
+    # print(id)
     data = dell_user(id)
-    if bool(data):
+    if data == "success":
         response = {
             'status': 'success'
         }
@@ -262,4 +268,3 @@ def dell_user():
 
 if __name__ == "__main__":
     app.run(host=my_ip)
-    # dashboard_chart()
