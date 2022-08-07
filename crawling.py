@@ -13,7 +13,6 @@ access_token_secret = '3O6SMyvqLTpNsLQCJcs9iwbvcyJ8iJfD9yIBA7cF27SE5'
 authentication = tweepy.OAuthHandler(api_key, api_key_secret)
 authentication.set_access_token(access_token, access_token_secret)
 api = tweepy.API(authentication, wait_on_rate_limit=True)
-
 tweetsPerQry = 100
 maxTweets = 5000
 
@@ -24,10 +23,8 @@ def crawling(keywords):
     for search_key in keywords:
         tweetCount = 0
         maxId = -1
-
         hasil_tweet = []
         hasil_isi_tweet = []
-
         # cari hingga maxtweet
         while tweetCount < maxTweets:
             if maxId <= 0:

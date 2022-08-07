@@ -1,15 +1,11 @@
 from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
-import json
-import sqlite3
+from tqdm import tqdm
 import socket
 from db import *
 from process import *
+from crawling import *
 import pandas as pd
-import hashlib
-import csv
-import json
-import requests
 
 my_ip = socket.gethostbyname(socket.gethostname())
 app = Flask(__name__)
@@ -18,6 +14,21 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return "server berjalan"
+
+
+@app.route('/crawling', methods=['GET', 'POST'])
+def proses_crawling():
+    keyword = request.form.get("keyword")
+    data = crawling(keyword)
+    if bool(data):
+        response = {
+            'status': 'success'
+        }
+    else:
+        response = {
+            'status': 'failed'
+        }
+    return response
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -115,13 +126,8 @@ def import_training():
     file_name = secure_filename(file.filename)
     file_path = 'Upload/' + file_name
     file.save(file_path)
-
     db_delete_all("training")
-
     db_import_data_training(file_path)
-
-    print(file_path)
-
     return file_path
 
 
@@ -131,34 +137,27 @@ def import_testing():
     file_name = secure_filename(file.filename)
     file_path = 'Upload/' + file_name
     file.save(file_path)
-
     db_delete_all("testing")
-
     db_import_data_testing(file_path)
-
     return file_path
-
-
-@app.route('/tfidf-proses', methods=['GET', 'POST'])
-def tfidf_proses():
-    # proses tf-idf training dan testing
-    tfidf(get_hasil())
 
 
 @app.route('/halaman-pengujian', methods=['GET', 'POST'])
 def halaman_proses_pengujian():
     data_testing = db_get_all_testing()
     data_training = db_get_all_training()
-
     data = {
         "data_testing": data_testing,
         "data_training": data_training,
+        # "tf_idf" :
     }
     return jsonify(data)
 
 
 @app.route('/pengujian', methods=['GET', 'POST'])
 def pengujian():
+    # proses tf-idf training dan testing
+    tfidf(get_hasil())
     # read csv hasil tf-idf
     df = pd.read_csv('C:/Users/IRVAN/backendmknn/Upload/tfidf.csv', sep=';')
     # membagi hasil tf idf dari total data set ke 600 training, 400 testing
@@ -189,7 +188,6 @@ def pengujian():
         pelabelan_dtdt.to_csv('C:/Users/IRVAN/backendmknn/Upload/labelargsmalleuclideandtdt.csv', index=False)
         validitas_dtdt = validitas(pelabelan_dtdt, label_train)
         validitas_dtdt.to_csv('C:/Users/IRVAN/backendmknn/Upload/valargsmalleuclideandtdt.csv', index=False)
-
         lbl = []
         for i in tqdm(range(len(jarak_dtds.iloc[0])), leave=False):
             rank, label = ranking(validitas_dtdt, jarak_dtds[str(i)], j)
@@ -197,10 +195,13 @@ def pengujian():
             for i in label:
                 lbl2.append(label_train[i])
             labelterdekat = pd.DataFrame(lbl2)
+            labelterdekat.to_json('C:/xampp/htdocs/mknnfrontend/assets/json/labelterdekat.json')
             labelterdekat.to_csv('C:/Users/IRVAN/backendmknn/Upload/labelterdekat.csv')
             lbl.append(most_frequent(lbl2))
             updateData(nama_polaritas, most_frequent(lbl2), idx)
             idx += 1
+    status = "success"
+    return status
 
 
 @app.route('/test-akurasi', methods=['GET', 'POST'])
@@ -288,7 +289,6 @@ def dell_user():
 def dell_all():
     tabel = request.form.get("tabel")
     data = db_delete_all(tabel)
-
     if data == "success":
         response = {
             'status': 'success'

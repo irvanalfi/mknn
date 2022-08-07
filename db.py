@@ -1,5 +1,4 @@
 import sqlite3
-import pandas as pd
 import preprocess
 
 
@@ -38,6 +37,9 @@ def db_delete_all(tabel):
         conn, cursor = get_conn_cursor()
         query = "DELETE FROM " + tabel
         cursor.execute(query)
+        conn.commit()
+        qwery = "DELETE FROM sqlite_sequence where name='"+tabel+"'"
+        cursor.execute(qwery)
         conn.commit()
         message = "success"
     except:
