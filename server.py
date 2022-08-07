@@ -20,15 +20,15 @@ def index():
 def proses_crawling():
     keyword = request.form.get("keyword")
     data = crawling(keyword)
-    if bool(data):
-        response = {
-            'status': 'success'
-        }
-    else:
-        response = {
-            'status': 'failed'
-        }
-    return response
+    # if bool(data):
+    #     response = {
+    #         'status': 'success'
+    #     }
+    # else:
+    #     response = {
+    #         'status': 'failed'
+    #     }
+    # return response
 
 
 @app.route('/login', methods=['GET', 'POST'])
