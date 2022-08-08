@@ -16,19 +16,56 @@ def index():
     return "server berjalan"
 
 
-@app.route('/crawling', methods=['GET', 'POST'])
+@app.route('/data-crawling', methods=['GET', 'POST'])
+def data_crawling():
+    return jsonify(get_all_crawling())
+
+
+@app.route('/proses-crawling', methods=['GET', 'POST'])
 def proses_crawling():
     keyword = request.form.get("keyword")
     data = crawling(keyword)
-    # if bool(data):
-    #     response = {
-    #         'status': 'success'
-    #     }
-    # else:
-    #     response = {
-    #         'status': 'failed'
-    #     }
-    # return response
+    if data=="success":
+        response = {
+            'status': 'success'
+        }
+    else:
+        response = {
+            'status': 'failed'
+        }
+    return response
+
+
+@app.route('/pindah-training', methods=['GET', 'POST'])
+def pindah_training():
+    id_data = request.form.get("id")
+    crawling = get_crawling_by_id(id_data)
+    data = add_training(crawling, id_data)
+    if data == "success":
+        response = {
+            'status': 'success'
+        }
+    else:
+        response = {
+            'status': 'failed'
+        }
+    return response
+
+
+@app.route('/pindah-testing', methods=['GET', 'POST'])
+def pindah_testing():
+    id_data = request.form.get("id")
+    crawling = get_crawling_by_id(id_data)
+    data = add_testing(crawling, id_data)
+    if data == "success":
+        response = {
+            'status': 'success'
+        }
+    else:
+        response = {
+            'status': 'failed'
+        }
+    return response
 
 
 @app.route('/login', methods=['GET', 'POST'])

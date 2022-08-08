@@ -70,6 +70,22 @@ def get_data_preprocessing(path):
     return data
 
 
+def get_data_preprocessing_by_one(crawling):
+    c_text, tokenize_text, stopwords, lemmawords = preprocessing(crawling['tweet'])
+    stopword = "'" + "','".join(map(str, stopwords))+"'"
+    tokenize = "'" + "','".join(map(str, tokenize_text))+"'"
+    data = {
+        'username' : crawling['username'],
+        'tweet_asli' : crawling['tweet'],
+        'clean_text' : c_text,
+        'tokenize' : tokenize,
+        'stopword_r' : stopword,
+        'lemmawords' : lemmawords,
+        'polaritas' : crawling['polaritas']
+    }
+    return data
+
+
 def pelabelanOtomatis():
     data = [db.get_hasil_training(), db.get_hasil_testing()]
 

@@ -1,5 +1,6 @@
 import sqlite3
 import preprocess
+from preprocess import *
 
 
 def db_connection():
@@ -55,6 +56,76 @@ def db_import_data_testing(path):
     polaritas_awal) VALUES(?, ?, ?, ?, ?, ?, ?)"""
     db_import(sql_query, path)
     print("Success import data testing from csv")
+
+
+def get_all_crawling():
+    crawls = []
+    try:
+        conn, cursor = get_conn_cursor()
+        sql_query = "SELECT * FROM crawling"
+        rows = cursor.execute(sql_query).fetchall()
+        for i in rows:
+            crawl = {}
+            crawl["id_crawling"] = i[0]
+            crawl["username"] = i[1]
+            crawl["tweet"] = i[2]
+            crawl["polaritas"] = i[3]
+            crawls.append(crawl)
+    except:
+        crawls = []
+    return crawls
+
+def add_crawling(username, tweet, polaritas):
+    conn, cursor = get_conn_cursor()
+    query = "INSERT INTO crawling(username, tweet, polaritas) VALUES('" + username + "', '" + tweet + "', '" + polaritas + "')"
+    cursor.execute(query)
+    conn.commit()
+
+
+def get_crawling_by_id(id):
+    conn, cursor = get_conn_cursor()
+    query = "SELECT * FROM crawling WHERE crawling.id_crawling = '" + str(id) + "'"
+    row = cursor.execute(query).fetchone()
+    if row is not None:
+        data = {
+            'id_crawling': row[0],
+            'username': row[1],
+            'tweet': row[2],
+            'polaritas': row[3]
+        }
+    else:
+        data = {}
+    return data
+
+
+def add_training(crawling, id_data):
+    conn, cursor = get_conn_cursor()
+    preprocess = get_data_preprocessing_by_one(crawling)
+    cursor.execute( "INSERT INTO training(username, tweet_asli, clean_text, tokenize, stopword_r, tweet_hasil, polaritas) " \
+            "VALUES(?, ?, ?, ?, ?, ?, ?)",(preprocess['username'], preprocess['tweet_asli'], preprocess[
+        'clean_text'], preprocess['tokenize'], preprocess['stopword_r'], preprocess['lemmawords'], preprocess[
+        'polaritas']))
+    conn.commit()
+    query = "DELETE FROM crawling WHERE id_crawling = " + str(id_data) + ""
+    cursor.execute(query)
+    conn.commit()
+    status = "success"
+    return status
+
+
+def add_testing(crawling, id_data):
+    conn, cursor = get_conn_cursor()
+    preprocess = get_data_preprocessing_by_one(crawling)
+    cursor.execute( "INSERT INTO testing(username, tweet_asli, clean_text, tokenize, stopword_r, tweet_hasil, polaritas_awal) " \
+            "VALUES(?, ?, ?, ?, ?, ?, ?)",(preprocess['username'], preprocess['tweet_asli'], preprocess[
+        'clean_text'], preprocess['tokenize'], preprocess['stopword_r'], preprocess['lemmawords'], preprocess[
+        'polaritas']))
+    conn.commit()
+    query = "DELETE FROM crawling WHERE id_crawling = " + str(id_data) + ""
+    cursor.execute(query)
+    conn.commit()
+    status = "success"
+    return status
 
 
 def db_get_all_training():
