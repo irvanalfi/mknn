@@ -68,6 +68,21 @@ def pindah_testing():
     return response
 
 
+@app.route('/dell-crawling', methods=['GET', 'POST'])
+def dell_crawling():
+    id = request.form.get("id")
+    data = db_dell_crawling(id)
+    if data == "success":
+        response = {
+            'status': 'success'
+        }
+    else:
+        response = {
+            'status': 'failed'
+        }
+    return jsonify(response)
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     username = request.form.get("username")

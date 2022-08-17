@@ -75,6 +75,7 @@ def get_all_crawling():
         crawls = []
     return crawls
 
+
 def add_crawling(username, tweet, polaritas):
     conn, cursor = get_conn_cursor()
     query = "INSERT INTO crawling(username, tweet, polaritas) VALUES('" + username + "', '" + tweet + "', '" + polaritas + "')"
@@ -96,6 +97,30 @@ def get_crawling_by_id(id):
     else:
         data = {}
     return data
+
+
+def update_crawling(polaritas):
+    conn, cursor = get_conn_cursor()
+    query = "UPDATE crawling SET polaritas = '" + polaritas + "' WHERE id_crawling =" + str(id) + ""
+    cursor.execute(query)
+    conn.commit()
+    data = get_crawling_by_id(id)
+    return data
+
+
+def db_dell_crawling(id):
+    try:
+        conn, cursor = get_conn_cursor()
+        query = "DELETE FROM crawling WHERE id_crawling = " + str(id) + ""
+        cursor.execute(query)
+        conn.commit()
+        message = "success"
+    except:
+        conn.rollback()
+        message = "failed"
+    finally:
+        conn.close()
+    return message
 
 
 def add_training(crawling, id_data):
