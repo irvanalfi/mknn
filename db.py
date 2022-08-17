@@ -99,7 +99,7 @@ def get_crawling_by_id(id):
     return data
 
 
-def update_crawling(polaritas):
+def update_crawling(id, polaritas):
     conn, cursor = get_conn_cursor()
     query = "UPDATE crawling SET polaritas = '" + polaritas + "' WHERE id_crawling =" + str(id) + ""
     cursor.execute(query)

@@ -68,6 +68,26 @@ def pindah_testing():
     return response
 
 
+@app.route('/update-crawling', methods=['GET', 'POST'])
+def updt_crawling():
+    id = request.form.get("id")
+    polaritas = request.form.get("polaritas")
+    data = update_crawling(id, polaritas)
+
+    if bool(data):
+        response = {
+            'status': 'success',
+            'data': data
+        }
+    else:
+        response = {
+            'status': 'failed',
+            'data': data
+        }
+    return response
+
+
+
 @app.route('/dell-crawling', methods=['GET', 'POST'])
 def dell_crawling():
     id = request.form.get("id")
