@@ -1,0 +1,13 @@
+pandas~=1.4.3
+tqdm~=4.64.0
+Flask~=2.1.2
+Werkzeug~=2.1.2
+numpy~=1.23.1
+sklearn~=0.0
+scikit-learn~=1.1.1
+tweepy~=4.10.0
+emoji~=2.0.0
+django-emoji~=2.2.2
+contractions~=0.1.72
+textblob~=0.17.1
+nltk~=3.7

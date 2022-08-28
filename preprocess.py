@@ -34,7 +34,7 @@ def tokenizing(clean_text: str):
 
 
 def stop_word_removal(token_text):
-    manual_stop = ("windows", "pc", "microsoft", "android", "computer", "device", "google", "chrome", "edge", "browser")
+    manual_stop = ("windows", "pc", "microsoft", "android", "computer", "device", "google", "chrome", "edge", "browser", "os", "apple", "mac", "desktop", "ubuntu", "linux", "kalilinux")
     stops = set(stopwords.words("english"))
     stops.update(manual_stop)
     stopword = [word for word in token_text if word not in stops]
