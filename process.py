@@ -7,8 +7,10 @@ from sklearn import metrics
 from tqdm import tqdm
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
-from db import get_polaritas
-
+# from db import get_polaritas
+from multigpu import device_controller, main
+from numba import jit
+from threading import Thread
 
 def showDataTraining():
     df = pd.read_csv("Upload/testing.csv", encoding="ISO-8859-1")
@@ -37,11 +39,11 @@ def tfidf(tweet_bersih):
     print(title_tfidf.shape)
     dd = pd.DataFrame(data=title_tfidf.toarray(), columns=tokens)
     display(dd)
-    dd.to_csv('C:/Users/IRVAN/backendmknn/Upload/tfidf.csv', index= False)
+    dd.to_csv('D:/github/mknn/Upload/tfidf.csv', index= False)
     return X
 
 
-# @jit(target_backend=device_controller(0))
+@jit(target_backend=device_controller(0))
 def jarakeuclideanDTDT(df):
     df2 = []
     for i in tqdm(range(df.shape[0])):
@@ -56,10 +58,10 @@ def jarakeuclideanDTDT(df):
                 dtdt.append(0)
         df2.append(dtdt)
     x = pd.DataFrame(df2)
-    x.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', index=False, float_format="%.2f")
+    x.to_csv('D:/github/mknn/Upload/euclideandtdt.csv', index=False, float_format="%.2f")
     return x
 
-# @jit(target_backend=device_controller(0))
+@jit(target_backend=device_controller(0))
 def jarakeuclideanDTDS(dtdf,dsdf,split):
     df2 = []
     dsdf.reset_index()
@@ -72,7 +74,7 @@ def jarakeuclideanDTDS(dtdf,dsdf,split):
             dtdt.append(sqrt(sum))
         df2.append(dtdt)
     x = pd.DataFrame(df2)
-    x.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtds.csv', index=False, float_format="%.2f")
+    x.to_csv('D:/github/mknn/Upload/euclideandtds.csv', index=False, float_format="%.2f")
     return x
 
 

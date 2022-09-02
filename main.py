@@ -4,8 +4,8 @@ import pandas
 from tqdm import tqdm
 from IPython.display import display
 
-from db import db_import_data_testing, db_import_data_training, get_hasil, get_label, updateData
-from preprocess import *
+# from db import db_import_data_testing, db_import_data_training, get_hasil, get_label, updateData
+# from preprocess import *
 from process import *
 my_ip = socket.gethostbyname(socket.gethostname())
 app = Flask(__name__)
@@ -39,19 +39,19 @@ if __name__ == "__main__":
     # db_import_data_training("Upload/training.csv")
     # db_import_data_testing("Upload/testing.csv")
     # pelabelanOtomatis()
-    x= tfidf(get_hasil())
+    # x= tfidf(get_hasil())
 
-    # df = pandas.read_csv('C:/Users/IRVAN/backendmknn/Upload/tfidf.csv', sep=';')
+    df = pandas.read_csv('D:/github/mknn/Upload/tfidf.csv', sep=',')
     #
-    # split1 = (df.shape[0] * 6) / 10
+    split1 = (df.shape[0] * 6) / 10
+    
+    df1 = pandas.DataFrame(df.iloc[:int(split1)])
+    df2 = pandas.DataFrame(df.iloc[int(split1):])
+    jarak_dtdt = jarakeuclideanDTDT(df1)
+    jarak_dtds = jarakeuclideanDTDS(df1, df2, split1)
     #
-    # df1 = pandas.DataFrame(df.iloc[:int(split1)])
-    # df2 = pandas.DataFrame(df.iloc[int(split1):])
-    # # jarak_dtdt = jarakeuclideanDTDT(df1)
-    # # jarak_dtds = jarakeuclideanDTDS(df1, df2, split1)
-    #
-    # jarak_dtdt = pandas.read_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', sep=',')
-    # jarak_dtds = pandas.read_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtds.csv', sep=',')
+    # jarak_dtdt = pandas.read_csv('D:/github/mknn/Upload/euclideandtdt.csv', sep=',')
+    # jarak_dtds = pandas.read_csv('D:/github/mknn/Upload/euclideandtds.csv', sep=',')
     #
     # small_dtdt = small(jarak_dtdt)
     #
@@ -61,19 +61,19 @@ if __name__ == "__main__":
     #     idx = 1
     #     nama_polaritas = "polaritas_akhir_k" + str(j)
     #     k_dtdt = k_euclidean(small_dtdt, j)
-    #     k_dtdt.to_csv('C:/Users/IRVAN/backendmknn/Upload/k11euclideandtdt.csv', index=False)
+    #     k_dtdt.to_csv('D:/github/mknn/Upload/k11euclideandtdt.csv', index=False)
     #
     #     lokasi_dtdt = lokasi(jarak_dtdt, j)
-    #     lokasi_dtdt.to_csv('C:/Users/IRVAN/backendmknn/Upload/lokasiargsmalleuclideandtdt.csv', index=False)
+    #     lokasi_dtdt.to_csv('D:/github/mknn/Upload/lokasiargsmalleuclideandtdt.csv', index=False)
     #
     #     label_train = get_label("training")
     #     label_test = get_polaritas("polaritas_awal")
     #
     #     pelabelan_dtdt = pelabelan(lokasi_dtdt, label_train)
-    #     pelabelan_dtdt.to_csv('C:/Users/IRVAN/backendmknn/Upload/labelargsmalleuclideandtdt.csv', index=False)
+    #     pelabelan_dtdt.to_csv('D:/github/mknn/Upload/labelargsmalleuclideandtdt.csv', index=False)
     #
     #     validitas_dtdt = validitas(pelabelan_dtdt, label_train)
-    #     validitas_dtdt.to_csv('C:/Users/IRVAN/backendmknn/Upload/valargsmalleuclideandtdt.csv', index=False)
+    #     validitas_dtdt.to_csv('D:/github/mknn/Upload/valargsmalleuclideandtdt.csv', index=False)
     #
     #     lbl = []
     #     for i in tqdm(range(len(jarak_dtds.iloc[0])), leave=False):
