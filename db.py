@@ -175,65 +175,11 @@ def db_get_all_training():
     return trains
 
 
-def db_get_seratus_training():
-    trains = []
-    try:
-        conn, cursor = get_conn_cursor()
-        sql_query = "SELECT * FROM training LIMIT 100"
-        rows = cursor.execute(sql_query).fetchall()
-        for i in rows:
-            train = {}
-            train["id_training"] = i[0]
-            train["username"] = i[1]
-            train["tweet_asli"] = i[2]
-            train["clean_text"] = i[3]
-            train["tokenize"] = i[4]
-            train["stopword_r"] = i[5]
-            train["tweet_hasil"] = i[6]
-            train["polaritas"] = i[7]
-            trains.append(train)
-    except:
-        trains = []
-    return trains
-
-
 def db_get_all_testing():
     tests = []
     try:
         conn, cursor = get_conn_cursor()
         sql_query = "SELECT * FROM testing"
-        rows = cursor.execute(sql_query).fetchall()
-        for i in rows:
-            test = {}
-            test["id_testing"] = i[0]
-            test["username"] = i[1]
-            test["tweet_asli"] = i[2]
-            test["clean_text"] = i[3]
-            test["tokenize"] = i[4]
-            test["stopword_r"] = i[5]
-            test["tweet_hasil"] = i[6]
-            test["polaritas_awal"] = i[7]
-            test["polaritas_akhir_k3"] = i[8]
-            test["polaritas_akhir_k5"] = i[9]
-            test["polaritas_akhir_k7"] = i[10]
-            test["polaritas_akhir_k9"] = i[11]
-            test["polaritas_akhir_k11"] = i[12]
-            test["polaritas_akhir_k13"] = i[13]
-            test["polaritas_akhir_k15"] = i[14]
-            test["polaritas_akhir_k17"] = i[15]
-            test["polaritas_akhir_k19"] = i[16]
-            test["polaritas_akhir_k21"] = i[17]
-            tests.append(test)
-    except:
-        tests = []
-    return tests
-
-
-def db_get_seratus_testing():
-    tests = []
-    try:
-        conn, cursor = get_conn_cursor()
-        sql_query = "SELECT * FROM testing LIMIT 100"
         rows = cursor.execute(sql_query).fetchall()
         for i in rows:
             test = {}
