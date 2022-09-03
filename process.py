@@ -6,10 +6,10 @@ from sklearn import metrics
 from tqdm import tqdm
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
-# from db import get_polaritas
-from multigpu import device_controller, main
-from numba import jit
-from threading import Thread
+from db import get_polaritas
+# from multigpu import device_controller, main
+# from numba import jit
+# from threading import Thread
 
 def tfidf(tweet_bersih):
     bow_transformer = CountVectorizer().fit(tweet_bersih)
@@ -20,12 +20,12 @@ def tfidf(tweet_bersih):
     tfidf_transformer = TfidfTransformer().fit(text_bow)
     title_tfidf = tfidf_transformer.transform(text_bow)
     dd = pd.DataFrame(data=title_tfidf.toarray(), columns=tokens)
-    display(dd)
-    dd.to_csv('D:/github/mknn/Upload/tfidf.csv', index= False)
+    dd.to_json('C:/xampp/htdocs/mknnfrontend/assets/json/tfidf.json')
+    dd.to_csv('C:/Users/IRVAN/backendmknn/Upload/tfidf.csv', index=False)
     return X
 
 
-@jit(target_backend=device_controller(0))
+# @jit(target_backend=device_controller(0))
 def jarakeuclideanDTDT(df):
     df2 = []
     for i in tqdm(range(df.shape[0])):
@@ -40,10 +40,11 @@ def jarakeuclideanDTDT(df):
                 dtdt.append(0)
         df2.append(dtdt)
     x = pd.DataFrame(df2)
-    x.to_csv('D:/github/mknn/Upload/euclideandtdt.csv', index=False, float_format="%.2f")
+    x.to_json('C:/xampp/htdocs/mknnfrontend/assets/json/euclideandtdt.json')
+    x.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtdt.csv', index=False, float_format="%.2f")
     return x
 
-@jit(target_backend=device_controller(0))
+# @jit(target_backend=device_controller(0))
 def jarakeuclideanDTDS(dtdf,dsdf,split):
     df2 = []
     dsdf.reset_index()
@@ -56,7 +57,8 @@ def jarakeuclideanDTDS(dtdf,dsdf,split):
             dtdt.append(sqrt(sum))
         df2.append(dtdt)
     x = pd.DataFrame(df2)
-    x.to_csv('D:/github/mknn/Upload/euclideandtds.csv', index=False, float_format="%.2f")
+    x.to_json('C:/xampp/htdocs/mknnfrontend/assets/json/euclideandtds.json')
+    x.to_csv('C:/Users/IRVAN/backendmknn/Upload/euclideandtds.csv', index=False, float_format="%.2f")
     return x
 
 

@@ -216,12 +216,11 @@ def import_testing():
 
 @app.route('/halaman-pengujian', methods=['GET', 'POST'])
 def halaman_proses_pengujian():
-    data_testing = db_get_all_testing()
-    data_training = db_get_all_training()
+    data_testing = db_get_limapuluh_testing()
+    data_training = db_get_limapuluh_training()
     data = {
         "data_testing": data_testing,
-        "data_training": data_training,
-        # "tf_idf" :
+        "data_training": data_training
     }
     return jsonify(data)
 
