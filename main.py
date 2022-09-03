@@ -2,8 +2,8 @@ import pandas
 from tqdm import tqdm
 from IPython.display import display
 
-# from db import db_import_data_testing, db_import_data_training, get_hasil, get_label, updateData
-# from preprocess import *
+from db import db_import_data_testing, db_import_data_training, get_hasil, get_label, updateData
+from preprocess import *
 from process import *
 
 
@@ -11,16 +11,16 @@ if __name__ == "__main__":
     # db_import_data_training("Upload/training.csv")
     # db_import_data_testing("Upload/testing.csv")
     # pelabelanOtomatis()
-    # x= tfidf(get_hasil())
+    tfidf(get_hasil())
 
-    df = pandas.read_csv('D:/github/mknn/Upload/tfidf.csv', sep=',')
+    # df = pandas.read_csv('D:/github/mknn/Upload/tfidf.csv', sep=',')
+    # #
+    # split1 = (df.shape[0] * 6) / 10
     #
-    split1 = (df.shape[0] * 6) / 10
-    
-    df1 = pandas.DataFrame(df.iloc[:int(split1)])
-    df2 = pandas.DataFrame(df.iloc[int(split1):])
-    jarak_dtdt = jarakeuclideanDTDT(df1)
-    jarak_dtds = jarakeuclideanDTDS(df1, df2, split1)
+    # df1 = pandas.DataFrame(df.iloc[:int(split1)])
+    # df2 = pandas.DataFrame(df.iloc[int(split1):])
+    # jarak_dtdt = jarakeuclideanDTDT(df1)
+    # jarak_dtds = jarakeuclideanDTDS(df1, df2, split1)
     #
     # jarak_dtdt = pandas.read_csv('D:/github/mknn/Upload/euclideandtdt.csv', sep=',')
     # jarak_dtds = pandas.read_csv('D:/github/mknn/Upload/euclideandtds.csv', sep=',')
