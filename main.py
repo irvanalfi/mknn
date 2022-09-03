@@ -1,5 +1,3 @@
-from flask import Flask
-import socket
 import pandas
 from tqdm import tqdm
 from IPython.display import display
@@ -7,35 +5,9 @@ from IPython.display import display
 # from db import db_import_data_testing, db_import_data_training, get_hasil, get_label, updateData
 # from preprocess import *
 from process import *
-my_ip = socket.gethostbyname(socket.gethostname())
-app = Flask(__name__)
-
-
-@app.route('/', methods=['GET', 'POST'])
-def dashboar():
-    data = {
-        "datatesting": "200",
-        "datatraining": "800"
-    }
-    return data
-
-
-def most_frequent(List):
-    counter = 0
-    num = List[0]
-
-    for i in List:
-        curr_frequency = List.count(i)
-        if (curr_frequency > counter):
-            counter = curr_frequency
-            num = i
-
-    return num
 
 
 if __name__ == "__main__":
-    # app.run(host=my_ip)
-    # db_get_all_training()
     # db_import_data_training("Upload/training.csv")
     # db_import_data_testing("Upload/testing.csv")
     # pelabelanOtomatis()
@@ -54,7 +26,7 @@ if __name__ == "__main__":
     # jarak_dtds = pandas.read_csv('D:/github/mknn/Upload/euclideandtds.csv', sep=',')
     #
     # small_dtdt = small(jarak_dtdt)
-    #
+    # #jumlah k yang digunakan
     # k = [3, 5, 7, 9, 11, 13, 15, 17, 19, 21]
     # idx = 1
     # for j in tqdm(k):
@@ -82,11 +54,14 @@ if __name__ == "__main__":
     #         lbl2 = []
     #         for i in label:
     #             lbl2.append(label_train[i])
+    #         labelterdekat = pandas.DataFrame(lbl2)
+    #         labelterdekat.to_csv('C:/Users/IRVAN/backendmknn/Upload/labelterdekat.csv')
     #         lbl.append(most_frequent(lbl2))
     #         updateData(nama_polaritas, most_frequent(lbl2), idx)
     #         idx += 1
     #     label_df = pandas.DataFrame(lbl)
     #
-    # for j in k:
-    #     print("pengujian akurasi k-" + str(j))
-    #     testaccuracy("polaritas_awal", "polaritas_akhir_k" + str(j))
+    # # k = [3, 5, 7, 9, 11, 13, 15, 17, 19, 21]
+    # # for j in k:
+    # #     print("pengujian akurasi k-" + str(j))
+    # #     testaccuracy("polaritas_awal", "polaritas_akhir_k" + str(j))
